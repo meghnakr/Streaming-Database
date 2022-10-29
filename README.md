@@ -13,10 +13,11 @@ Database retrieval application for a hypothetical streaming service.
 
 ## Database Setup
 1. Get the creds.json file from Google Drive. 
-2. (Todo for Kay) The env variables for the db is out in the open and unsafe, I will setup an env file with those variables. 
+2. Get the env file from Google Drive. 
 3. Add the creds.json file to this project directory. 
 4. Run `$set:GOOGLE_APPLICATION_CREDENTIALS='creds.json'` so that it knows where to pull the Google credentials for Google Cloud. 
-5. Get access from Kay to the Google Cloud terminal so you can view the database from your Google Cloud console. 
+5. Run all commands from env file. 
+6. Get access from Kay to the Google Cloud terminal so you can view the database from your Google Cloud console. 
 
 ## Dependencies Setup
 1. Run `pip -r install requirements.txt` to get all dependencies. 
