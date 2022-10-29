@@ -10,11 +10,10 @@ import sqlalchemy
 # Cloud SQL instance of MySQL using the Cloud SQL Python Connector.
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
 
-    instance_connection_name = 'cs348project-367000:us-central1:myhbodb'  # e.g. 'project:region:instance'
-    db_user = 'root'  # e.g. 'my-db-user'
-    db_pass = 'richard'  # e.g. 'my-db-password'
-    db_name = 'streaming'  # e.g. 'my-database'
-
+    instance_connection_name = os.environ["INSTANCE_CONNECTION_NAME"]  
+    db_user = os.environ.get("DB_USER", "")
+    db_pass = os.environ["DB_PASS"]
+    db_name = os.environ["DB_NAME"] 
     ip_type = IPTypes.PRIVATE if os.environ.get("PRIVATE_IP") else IPTypes.PUBLIC
 
     connector = Connector(ip_type)
