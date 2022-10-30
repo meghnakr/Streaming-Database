@@ -15,21 +15,17 @@ CREATE TABLE Media(
 CREATE TABLE Subscribers(
    id integer PRIMARY KEY,
    name varchar(50),
-   email varchar(50)
+   email varchar(50),
+   plan_type varchar(50),
+   start_date date,
+   end_date date
 );
 
 CREATE TABLE Plan(
    plan_type varchar(50) PRIMARY KEY,
-   max_number_of_profiles integer
+   max_number_of_profiles integer,
+   cost float
 );
-
-CREATE TABLE Subscribes_To(
-   plan_type varchar(50),
-   subscriber_id integer,
-   start_date date,
-   end_date date,
-   PRIMARY KEY (plan_type, subscriber_id)
-)
 
 CREATE TABLE Profile (
    profile_id integer,
@@ -42,14 +38,12 @@ CREATE TABLE Profile (
 CREATE TABLE Actor(
    id integer PRIMARY KEY,
    name varchar(50),
-   age varchar(50),
    country varchar(50)
 );
 
 CREATE TABLE Director(
    id integer PRIMARY KEY,
    name varchar(50),
-   age varchar(50),
    country varchar(50)
 );
 
