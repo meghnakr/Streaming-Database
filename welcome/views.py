@@ -42,3 +42,8 @@ def put_media(request):
             return HttpResponse("Please go to Welcome page to reconfirm user has been added.")
 
     return render(request, 'submit.html')
+
+def search(request):
+    template = loader.get_template('welcome/search.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
