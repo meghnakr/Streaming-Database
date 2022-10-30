@@ -1,5 +1,5 @@
 CREATE TABLE Media(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(255),
    date_added date, /* date is always YYYY-MM-DD */
    date_leaving date,
