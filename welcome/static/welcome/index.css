@@ -1,0 +1,61 @@
+.media-item {
+    background-color: var(--background-color);
+    margin-bottom: 0px;
+    color: white;
+}
+
+h1 {
+
+    color: white;
+    background-color: var(--background-color);
+    margin-bottom: 0px !important;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+}
+
+.header {
+    display: grid;
+    grid-template-areas: 
+    ". . . . .";
+    background-color: var(--background-color);
+}
+
+
+.nav {
+    background-color: var(--background-color);
+}
+
+
+.welcome-button {
+    display:inline-block;
+    background-color: var(--background-color);
+    width: 50%;
+    height: 60%;
+    padding:0.2em 1.2em;
+    align-self: end;
+    border:0.1em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    border-radius:1em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+}
+
+.welcome-button:hover{
+    color:#000000;
+    background-color:#FFFFFF;
+}
+
+.welcome-button:focus {
+    outline: none;
+    border: 2px solid white;
+}
+@media all and (max-width:30em){
+    .welcome-button{
+    display:block;
+    margin:0.4em auto;
+    }
+}

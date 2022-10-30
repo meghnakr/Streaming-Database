@@ -1,21 +1,53 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
 
-<html lang="en-US">
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
-
     <title>bootstrap4</title>
     <title>Welcome page</title>
+
+
+
 </head>
 
 <body>
+
+    <div class="header">
+        <h1>
+            HBOMinimum
+        </h1>
+
+        <button class="welcome-button">
+            Add Media
+        </button>
+    
+        <button class="welcome-button">
+            Search
+        </button>
+    
+        <button class="welcome-button">
+            Edit
+        </button>
+    
+        <button class="welcome-button">
+            Analyse
+        </button>
+
+
+    </div>
+
+
+
+
     {% for m in medias %}
-    <p>{{m.name}}, {{m.id}}, {{m.age}}</p>
+    <p class="media-item">{{m.name}}, {{m.id}}, {{m.age}}</p>
     {% endfor %}
 </body>
-
 </html>
