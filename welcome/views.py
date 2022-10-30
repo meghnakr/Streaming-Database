@@ -23,6 +23,16 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def submit(request):
+    template = loader.get_template('welcome/submit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def edit(request):
+    template = loader.get_template('welcome/edit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def put_media(request):
     if request.method == 'POST':
         m = Media(request.POST.get("media_name"),
                 request.POST.get("media_type"),

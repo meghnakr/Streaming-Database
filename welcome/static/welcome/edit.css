@@ -1,0 +1,58 @@
+form {
+    background-color: var(--background-color);
+    color: white;
+}
+
+
+
+.inputs {
+    display: grid;
+    grid-template-areas: 
+    ". . ."
+    ". . ."
+    ". . .";
+    background-color: var(--background-color);
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 15%;
+    padding-bottom: 1em;
+    grid-row-gap: 2em;
+    grid-column-gap: 1.5em;
+    font-family: var(--ff-primary);
+
+}
+
+
+input[type="date"]::before {
+    content: attr(placeholder) !important;
+    position: absolute;
+    color: rgb(103, 102, 102);
+  }
+  
+  input[type="date"] {
+    color: #ffffff;
+  }
+  
+  input[type="date"]:focus,
+  input[type="date"]:valid {
+    color: #666666;
+  }
+  
+  input[type="date"]:focus::before,
+  input[type="date"]:valid::before {
+    content: "" !important;
+  }
+
+
+.edit-input {
+    font-size: 20px;
+    height: 60px;
+    border: 1px solid white;
+    border-radius: 0.4em;
+    transition: 0.2s;
+}
+
+.edit-input:focus {
+    outline: none;
+    border: 3px solid #ffc400;
+}
