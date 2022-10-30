@@ -43,9 +43,13 @@ def put_media(request):
                 request.POST.get("date_leaving"),
                 request.POST.get("genre"),
                 request.POST.get("length_in_minutes"))
+        print(request.POST.get("age_rating"))
+        print(m.age_rating)
 
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
+            print("test")
+            print(m.age_rating)
             session = Session(db_conn)
             session.add(m)
             session.commit()
