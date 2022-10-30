@@ -21,7 +21,7 @@ Database retrieval application for a hypothetical streaming service.
 6. Get access from Kay to the Google Cloud terminal so you can view the database from your Google Cloud console. 
 
 ## Dependencies Setup
-1. Run `pip -r install requirements.txt` to get all dependencies. 
+1. Run `pip install -r requirements.txt` to get all dependencies. 
 
 ## Sanity Check
 1. If you've done everything until now with no errors, you should be able to run the server. 
@@ -72,5 +72,5 @@ Reference: https://getbootstrap.com/docs/4.5/components/alerts/
       -- Often times when we run Python, it will generate random files in our directory that keeps our code working but we have no idea what they does and 90% of the time they are machine-dependent. We don't want those files to create chaos, so before running `git add`, add those files (or directory) to the `.gitignore` file so that Git will not track them. (a good example is the `venv` folder)
       
 - Packages
-      -- If you are using new packages, add them to the `requirements.txt` file so that others who pulled your code, can just run `pip -r install requirements.txt` and get them.
+      -- If you are using new packages, add them to the `requirements.txt` file so that others who pulled your code, can just run `pip install -r requirements.txt` and get them.
 
