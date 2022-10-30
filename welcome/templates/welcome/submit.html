@@ -1,13 +1,33 @@
+<!DOCTYPE html>
 <html lang="en-US">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'welcome/submit.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
 </head>
 
 <body>
+
+    <div class="inputs">
+        <input type="text" class="submit-input" placeholder="Media Name">
+        <input type="text" class="submit-input" placeholder="Language">
+        <input type="date" class="submit-input" placeholder="Date Leaving" required>
+        <input type="text" class="submit-input" placeholder="Genre">
+        <input type="text" class="submit-input" placeholder="Age Rating">
+        <input type="text" class="submit-input" placeholder="Length in Minutes">
+        <input type="text" class="submit-input" placeholder="Company Name">
+    
+    </div>
+
+
+
+
     <form action="put-media" method="post">
         {% csrf_token %}
         <label>This button will add a fixed media to the database. </label>

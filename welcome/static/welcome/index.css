@@ -11,6 +11,7 @@ h1 {
     margin-bottom: 0px !important;
     padding-top: 0.5em;
     padding-left: 0.5em;
+    font-family: var(--ff-primary);
 }
 
 .header {
@@ -18,6 +19,7 @@ h1 {
     grid-template-areas: 
     ". . . . .";
     background-color: var(--background-color);
+    font-family: var(--ff-primary);
 }
 
 
@@ -27,6 +29,7 @@ h1 {
 
 
 .welcome-button {
+    font-family: var(--ff-primary);
     display:inline-block;
     background-color: var(--background-color);
     width: 50%;
