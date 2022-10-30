@@ -66,9 +66,11 @@ Reference: https://getbootstrap.com/docs/4.5/components/alerts/
 
 # Housekeeping
 - Github branches
-      - To manage future merge conflicts and avoid crashing the main code, we should all work on our own branch. Do a `git pull origin main` before you code every time you work on the project to avoid any future merge conflicts. You can run the `git add`, `git commit` and `git push` as usual in your branch, and after that, on the Github website, open a pull request and merge it. This way helps keeping track of code history. 
+      -- To manage future merge conflicts and avoid crashing the main code, we should all work on our own branch. Do a `git pull origin main` before you code every time you work on the project to avoid any future merge conflicts. You can run the `git add`, `git commit` and `git push` as usual in your branch, and after that, on the Github website, open a pull request and merge it. This way helps keeping track of code history. 
+
 - Python-self generated files
-      - Often times when we run Python, it will generate random files in our directory that keeps our code working but we have no idea what they does and 90% of the time they are machine-dependent. We don't want those files to create chaos, so before running `git add`, add those files (or directory) to the `.gitignore` file so that Git will not track them. (a good example is the `venv` folder)
+      -- Often times when we run Python, it will generate random files in our directory that keeps our code working but we have no idea what they does and 90% of the time they are machine-dependent. We don't want those files to create chaos, so before running `git add`, add those files (or directory) to the `.gitignore` file so that Git will not track them. (a good example is the `venv` folder)
+      
 - Packages
-      - If you are using new packages, add them to the `requirements.txt` file so that others who pulled your code, can just run `pip -r install requirements.txt` and get them.
+      -- If you are using new packages, add them to the `requirements.txt` file so that others who pulled your code, can just run `pip -r install requirements.txt` and get them.
 
