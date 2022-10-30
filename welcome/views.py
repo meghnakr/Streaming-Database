@@ -52,7 +52,11 @@ def put_media(request):
             print(m.age_rating)
             session = Session(db_conn)
             session.add(m)
-            
+            session.commit()
+        
+    template = loader.get_template('welcome/submit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))            
 
 #         cnx = sqlConnector().engine
 #         with cnx.connect() as db_conn:
