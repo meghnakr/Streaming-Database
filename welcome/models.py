@@ -1,17 +1,18 @@
+from operator import le
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Date, Integer, String, Table
+from sqlalchemy import Column, Date, Integer, String
 
 Base = declarative_base()
 
 # Create your models here.
 class Media(Base):
-    __tablename__ = "media"
+    __tablename__ = "Media"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
     media_type = Column(String)
     age_rating = Column(String)
-    release_year = Column(Integer)
+    year_of_release = Column(Integer)
     language = Column(String)
     date_added = Column(Date)
     date_leaving = Column(Date)
@@ -19,11 +20,16 @@ class Media(Base):
     length_in_minutes = Column(Integer)
     company_id = Column(Integer)
 
-    def __init__(self, name, media_type, age_rating, release_year, language, date_added, date_leaving, genre, length_in_minutes):
+    def __init__(self, name, media_type, age_rating, year_of_release, language, date_added, date_leaving, genre, length_in_minutes):
         self.name = name
         self.media_type = media_type
         self.age_rating = age_rating
-        self.release_year = release_year
+        self.year_of_release = year_of_release
+        self.language = language
+        self.date_added =date_added
+        self.date_leaving = date_leaving
+        self.genre = genre
+        self.length_in_minutes = length_in_minutes
 
 class Actor(Base):
 
