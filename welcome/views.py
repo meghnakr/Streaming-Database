@@ -61,6 +61,7 @@ def edit(request):
 #         m = Media(name="Admin", id=5, age=20)
 #         print(m)
 
+
 #         cnx = sqlConnector().engine
 #         with cnx.connect() as db_conn:
 #             session = Session(db_conn)
@@ -71,3 +72,8 @@ def edit(request):
 #             return HttpResponse("Please go to Welcome page to reconfirm user has been added.")
 
 #     return render(request, 'submit.html')
+
+def search(request):
+    template = loader.get_template('welcome/search.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
