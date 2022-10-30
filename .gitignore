@@ -1,6 +1,7 @@
 venv
 /welcome/__pycache__
 /hbo_min/__pycache__
+/hbomin/__pycache__
 /welcome/migrations
 creds.json
 db.sqlite3
