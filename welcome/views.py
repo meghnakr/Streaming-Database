@@ -23,26 +23,16 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def submit(request):
-    template = loader.get_template('welcome/submit.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def edit(request):
-    template = loader.get_template('welcome/edit.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def put_media(request):
     if request.method == 'POST':
         m = Media(request.POST.get("media_name"),
-                request.POST.get("media_type"),
-                request.POST.get("age_rating"),
-                request.POST.get("release_year"),
-                request.POST.get("languagae"),
-                request.POST.get("date_added"),
-                request.POST.get("date_leaving"),
-                request.POST.get("genre"),
-                request.POST.get("length_in_minutes"))
+            request.POST.get("media_type"),
+            request.POST.get("age_rating"),
+            request.POST.get("release_year"),
+            request.POST.get("languagae"),
+            request.POST.get("date_added"),
+            request.POST.get("date_leaving"),
+            request.POST.get("genre"),
+            request.POST.get("length_in_minutes"))
         print(request.POST.get("age_rating"))
         print(m.age_rating)
 
@@ -53,8 +43,13 @@ def put_media(request):
             session = Session(db_conn)
             session.add(m)
             session.commit()
-        
+            
     template = loader.get_template('welcome/submit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def edit(request):
+    template = loader.get_template('welcome/edit.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
