@@ -1,0 +1,9 @@
+DROP TABLE Media;
+DROP TABLE Subscribers;
+DROP TABLE Plan;
+DROP TABLE Profile;
+DROP TABLE Actor;
+DROP TABLE Director;
+DROP TABLE Company;
+DROP TABLE Media_Director;
+DROP TABLE Media_Actor;
