@@ -5,4 +5,5 @@ venv
 /welcome/migrations
 creds.json
 db.sqlite3
+requirements.txt
 

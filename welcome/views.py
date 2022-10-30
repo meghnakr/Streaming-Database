@@ -27,6 +27,11 @@ def submit(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
+def edit(request):
+    template = loader.get_template('welcome/edit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 def put_media(request):
     if request.method == 'POST':
         m = Media(name="Admin", id=5, age=20)
