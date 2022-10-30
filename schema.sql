@@ -7,7 +7,7 @@ CREATE TABLE Media(
    language varchar(50),
    genre varchar(50),
    length_in_minutes integer,
-   company_id integer /*foreign key to company.id*/
+   company_id integer, /*foreign key to company.id*/
    media_type varchar(50),
    year_of_release year
 );
