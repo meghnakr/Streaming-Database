@@ -14,25 +14,36 @@
 
 <body>
 
-    <div class="inputs">
-        <input type="text" class="submit-input" placeholder="Media Name">
-        <input type="text" class="submit-input" placeholder="Language">
-        <input type="date" class="submit-input" placeholder="Date Leaving" required>
-        <input type="text" class="submit-input" placeholder="Genre">
-        <input type="text" class="submit-input" placeholder="Age Rating">
-        <input type="text" class="submit-input" placeholder="Length in Minutes">
-        <input type="text" class="submit-input" placeholder="Company Name">
+
+    <form action="/submit" method="post" class="inputs">
+        {% csrf_token %}
+        <input type="text" class="submit-input" placeholder="Media Name" name="media_name">
+        <input type="text" class="submit-input" placeholder="Media Type" name="media_type">
+        <input type="text" class="submit-input" placeholder="Release Year"  name="release_year">
+        <input type="text" class="submit-input" placeholder="Language" name="language">
+        <input type="date" class="submit-input" placeholder="Date Added" name="date_added"required>
+        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving "required>
+        <input type="text" class="submit-input" placeholder="Genre" name="genre">
+        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating">
+        <input type="text" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes">
+        <input type="text" class="submit-input" placeholder="Company Name" name="company_name">
+        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors">
+        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors">
+        <input type="submit" value="Add!">
+    </form>
+
     
-    </div>
+    
 
 
 
 
-    <form action="put-media" method="post">
+
+    <!-- <form action="put-media" method="post">
         {% csrf_token %}
         <label>This button will add a fixed media to the database. </label>
         <input type="submit" class="btn btn-primary" value="OK" />
-    </form>
+    </form> -->
 </body>
 
 </html>

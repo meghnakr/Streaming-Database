@@ -23,22 +23,42 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def submit(request):
-    template = loader.get_template('welcome/submit.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def put_media(request):
     if request.method == 'POST':
-        m = Media(name="Admin", id=5, age=20)
-        print(m)
+        m = Media(request.POST.get("media_name"),
+                request.POST.get("media_type"),
+                request.POST.get("age_rating"),
+                request.POST.get("release_year"),
+                request.POST.get("languagae"),
+                request.POST.get("date_added"),
+                request.POST.get("date_leaving"),
+                request.POST.get("genre"),
+                request.POST.get("length_in_minutes"))
 
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
             session = Session(db_conn)
             session.add(m)
-
             session.commit()
+        
+    template = loader.get_template('welcome/submit.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
-            return HttpResponse("Please go to Welcome page to reconfirm user has been added.")
+    
 
-    return render(request, 'submit.html')
+
+# def put_media(request):
+#     if request.method == 'POST':
+#         m = Media(name="Admin", id=5, age=20)
+#         print(m)
+
+#         cnx = sqlConnector().engine
+#         with cnx.connect() as db_conn:
+#             session = Session(db_conn)
+#             session.add(m)
+
+#             session.commit()
+
+#             return HttpResponse("Please go to Welcome page to reconfirm user has been added.")
+
+#     return render(request, 'submit.html')
