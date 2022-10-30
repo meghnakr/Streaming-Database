@@ -4,11 +4,10 @@ form {
 }
 
 
+
 .inputs {
     display: grid;
     grid-template-areas: 
-    ". . ."
-    ". . ."
     ". . ."
     ". . ."
     ". . .";
@@ -23,11 +22,6 @@ form {
 
 }
 
-
-input[type="date"]:focus::before,
-input[type="date"]:valid::before {
-  content: "" !important;
-}
 
 input[type="date"]::before {
     content: attr(placeholder) !important;
@@ -44,11 +38,13 @@ input[type="date"]::before {
     color: #666666;
   }
   
+  input[type="date"]:focus::before,
+  input[type="date"]:valid::before {
+    content: "" !important;
+  }
 
 
-
-
-.submit-input {
+.edit-input {
     font-size: 20px;
     height: 60px;
     border: 1px solid white;
@@ -56,7 +52,7 @@ input[type="date"]::before {
     transition: 0.2s;
 }
 
-.submit-input:focus {
+.edit-input:focus {
     outline: none;
     border: 3px solid #ffc400;
 }
