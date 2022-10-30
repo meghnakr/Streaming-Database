@@ -15,8 +15,8 @@ Database retrieval application for a hypothetical streaming service.
 1. Get the creds.json file from Google Drive. 
 2. Get the env file from Google Drive. 
 3. Add the creds.json file to this project directory. 
-4. Run `$set:GOOGLE_APPLICATION_CREDENTIALS='creds.json'` so that it knows where to pull the Google credentials for Google Cloud. 
-      - (For Mac users) Run `export VAR_NAME=value` instead. `$set` only works on Windows. 
+4. Run `$env:GOOGLE_APPLICATION_CREDENTIALS='creds.json'` so that it knows where to pull the Google credentials for Google Cloud. 
+      - (For Mac users) Run `export VAR_NAME=value` instead. `$env` only works on Windows. 
 5. Run all commands from env file. 
 6. Get access from Kay to the Google Cloud terminal so you can view the database from your Google Cloud console. 
 
