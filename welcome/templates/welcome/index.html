@@ -59,6 +59,7 @@
                 <th>Genre</th>
                 <th>Length (mins)</th>
                 <th>Company ID</th>
+                <th>Edit</th>
 
             </tr>
             {% for m in medias %}
@@ -74,6 +75,9 @@
                 <td>{{m.genre}} </td>
                 <td>{{m.length_in_minutes}} </td>
                 <td>{{m.company_id}} </td>
+                <td><a href='{% url 'edit' %}'><button type="button" 
+                    class="btn btn-default"><span 
+                    aria-hidden="true"></span> Edit</button></a></td>
             </tr>
             {% endfor %}
         </table>

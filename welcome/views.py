@@ -1,11 +1,17 @@
 from django.http import HttpResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.template import loader
+#from .models import Post
+from django import forms
+
 
 from welcome.db import sqlConnector
 from welcome.models import *
+#class PostForm(forms.ModelForm):
+ #   class Meta:
+  #      model = Post
 
 def index(request):
 
@@ -49,6 +55,7 @@ def submit(request):
     return HttpResponse(template.render(context, request))
 
 def edit(request):
+    #post=get_object_or_404(request.POST)
 
 
     template = loader.get_template('welcome/edit.html')
