@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.template import loader
 
 from welcome.db import sqlConnector
-from welcome.models import Media
+from welcome.models import *
 
 def index(request):
 
@@ -28,7 +28,7 @@ def submit(request):
             request.POST.get("media_type"),
             request.POST.get("age_rating"),
             request.POST.get("release_year"),
-            request.POST.get("languagae"),
+            request.POST.get("language"),
             request.POST.get("date_added"),
             request.POST.get("date_leaving"),
             request.POST.get("genre"),
@@ -53,9 +53,6 @@ def edit(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
-    
-
-
 # def put_media(request):
 #     if request.method == 'POST':
 #         m = Media(name="Admin", id=5, age=20)
@@ -74,6 +71,63 @@ def edit(request):
 #     return render(request, 'submit.html')
 
 def search(request):
+    print(request)
+    if request.method == 'POST':
+        
+        searchMedia = Media(request.POST.get("media_name"),
+            request.POST.get("media_type"),
+            request.POST.get("age_rating"),
+            request.POST.get("release_year"),
+            request.POST.get("language"),
+            request.POST.get("date_added"),
+            request.POST.get("date_leaving"),
+            request.POST.get("genre"),
+            request.POST.get("length_in_minutes"))
+
+        searchCompany = request.POST.get("company_name")
+
+        mediaFilters = getMediaFilters(searchMedia)
+
+        attributesToReturn = [Media.name, Media.year_of_release]
+        
+        cnx = sqlConnector().engine
+        with cnx.connect() as db_conn:
+            session = Session(db_conn)
+            statement = select(*attributesToReturn).filter_by(**mediaFilters)
+            result = session.execute(statement).all()
+            print("Result:")
+            print(result)
+    
     template = loader.get_template('welcome/search.html')
     context = {}
     return HttpResponse(template.render(context, request))
+
+def getMediaFilters(searchMedia):
+    filters = {}
+    if (not searchMedia.name == None) and (not searchMedia.name == ""):
+        filters["name"] = searchMedia.name
+    
+    if (not searchMedia.media_type == None) and (not searchMedia.media_type == ""):
+        filters["media_type"] = searchMedia.media_type
+    
+    if (not searchMedia.age_rating == None) and (not searchMedia.age_rating == ""):
+        filters["age_rating"] = searchMedia.age_rating
+    
+    if (not searchMedia.year_of_release == None) and (not searchMedia.year_of_release == ""):
+        filters["year_of_release"] = searchMedia.year_of_release
+    
+    if (not searchMedia.language == None) and (not searchMedia.language == ""):
+        filters["language"] = searchMedia.language
+    
+    if (not searchMedia.date_added == None) and (not searchMedia.date_added == ""):
+        filters["date_added"] = searchMedia.date_added
+    
+    if (not searchMedia.date_leaving == None) and (not searchMedia.date_leaving == ""):
+        filters["date_leaving"] = searchMedia.date_leaving
+    
+    if (not searchMedia.genre == None) and (not searchMedia.genre == ""):
+        filters["genre"] = searchMedia.genre
+    
+    if (not searchMedia.length_in_minutes == None) and (not searchMedia.length_in_minutes == ""):
+        filters["length_in_minutes"] = searchMedia.length_in_minutes
+    return filters

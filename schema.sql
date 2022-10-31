@@ -36,19 +36,19 @@ CREATE TABLE Profile (
 );
 
 CREATE TABLE Actor(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
 
 CREATE TABLE Director(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
 
 CREATE TABLE Company(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
