@@ -1,5 +1,5 @@
 CREATE TABLE Media(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(255),
    date_added date, /* date is always YYYY-MM-DD */
    date_leaving date,
@@ -7,7 +7,7 @@ CREATE TABLE Media(
    language varchar(50),
    genre varchar(50),
    length_in_minutes integer,
-   company_id integer /*foreign key to company.id*/
+   company_id integer, /*foreign key to company.id*/
    media_type varchar(50),
    year_of_release year
 );
@@ -36,19 +36,19 @@ CREATE TABLE Profile (
 );
 
 CREATE TABLE Actor(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
 
 CREATE TABLE Director(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
 
 CREATE TABLE Company(
-   id integer PRIMARY KEY,
+   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );

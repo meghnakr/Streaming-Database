@@ -24,11 +24,11 @@
             HBOMinimum
         </h1>
 
-        <button class="welcome-button">
+        <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/submit';">
             Add Media
         </button>
     
-        <button class="welcome-button">
+        <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/search';">
             Search
         </button>
     
@@ -45,9 +45,44 @@
 
 
 
+    <div class="table-div"> 
+        <table class = "table table-hover">
+            <tr>
+                <th>Media ID</th>
+                <th>Name</th>
+                <th>Media type</th>
+                <th>Age rating</th>
+                <th>Year of release</th>
+                <th>Language</th>
+                <th>Date added</th>
+                <th>Date leaving</th>
+                <th>Genre</th>
+                <th>Length (mins)</th>
+                <th>Company ID</th>
+                <th>Edit</th>
 
-    {% for m in medias %}
-    <p class="media-item">{{m.name}}, {{m.id}}, {{m.age}}</p>
-    {% endfor %}
+            </tr>
+            {% for m in medias %}
+            <tr class="media-item">
+                <td>{{m.id}} </td>
+                <td>{{m.name}} </td>
+                <td>{{m.media_type}} </td>
+                <td>{{m.age_rating}} </td>
+                <td>{{m.year_of_release}} </td>
+                <td>{{m.language}} </td>
+                <td>{{m.date_added}} </td>
+                <td>{{m.date_leaving}} </td>
+                <td>{{m.genre}} </td>
+                <td>{{m.length_in_minutes}} </td>
+                <td>{{m.company_id}} </td>
+                <td><a href='{% url 'edit' %}'><button type="button" 
+                    class="btn btn-default"><span 
+                    aria-hidden="true"></span> Edit</button></a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
 </body>
 </html>
