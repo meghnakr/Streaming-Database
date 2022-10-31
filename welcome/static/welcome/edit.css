@@ -10,6 +10,8 @@ form {
     grid-template-areas: 
     ". . ."
     ". . ."
+    ". . ."
+    ". . ."
     ". . .";
     background-color: var(--background-color);
     padding-left: 10%;
@@ -56,3 +58,4 @@ input[type="date"]::before {
     outline: none;
     border: 3px solid #ffc400;
 }
+
