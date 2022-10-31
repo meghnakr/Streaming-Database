@@ -35,4 +35,9 @@
         <input type="submit" value="Search!">
     </form>
 
+    <h6>Results:</h6>
+    {% for m in medias %}
+    <p class="media-item">{{m.name}} ({{m.year_of_release}})</p>
+    {% endfor %}
+
 </body>

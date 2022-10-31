@@ -71,7 +71,7 @@ def edit(request):
 #     return render(request, 'submit.html')
 
 def search(request):
-    print(request)
+    result = []
     if request.method == 'POST':
         
         searchMedia = Media(request.POST.get("media_name"),
@@ -88,7 +88,7 @@ def search(request):
 
         mediaFilters = getMediaFilters(searchMedia)
 
-        attributesToReturn = [Media.name, Media.year_of_release]
+        attributesToReturn = [Media.id, Media.name, Media.year_of_release]
         
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
@@ -99,7 +99,9 @@ def search(request):
             print(result)
     
     template = loader.get_template('welcome/search.html')
-    context = {}
+    context = {
+        'medias': result
+    }
     return HttpResponse(template.render(context, request))
 
 def getMediaFilters(searchMedia):
