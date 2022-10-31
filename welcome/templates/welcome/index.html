@@ -45,9 +45,40 @@
 
 
 
+    <div class="table-div"> 
+        <table class = "table table-hover">
+            <tr>
+                <th>Media ID</th>
+                <th>Name</th>
+                <th>Media type</th>
+                <th>Age rating</th>
+                <th>Year of release</th>
+                <th>Language</th>
+                <th>Date added</th>
+                <th>Date leaving</th>
+                <th>Genre</th>
+                <th>Length (mins)</th>
+                <th>Company ID</th>
 
-    {% for m in medias %}
-    <p class="media-item">{{m.id}}, {{m.name}}, {{m.media_type}}, {{m.age_rating}}, {{m.year_of_release}}, {{m.language}}, {{m.date_added}}, {{m.date_leaving}}, {{m.genre}}, {{m.length_in_minutes}}, {{m.company_id}}</p>
-    {% endfor %}
+            </tr>
+            {% for m in medias %}
+            <tr class="media-item">
+                <td>{{m.id}} </td>
+                <td>{{m.name}} </td>
+                <td>{{m.media_type}} </td>
+                <td>{{m.age_rating}} </td>
+                <td>{{m.year_of_release}} </td>
+                <td>{{m.language}} </td>
+                <td>{{m.date_added}} </td>
+                <td>{{m.date_leaving}} </td>
+                <td>{{m.genre}} </td>
+                <td>{{m.length_in_minutes}} </td>
+                <td>{{m.company_id}} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
 </body>
 </html>
