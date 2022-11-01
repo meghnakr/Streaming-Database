@@ -1,5 +1,0 @@
-$env:GOOGLE_APPLICATION_CREDENTIALS='creds.json'
-$env:INSTANCE_CONNECTION_NAME='cs348project-367000:us-central1:myhbodb' 
-$env:DB_PASS='richard'  
-$env:DB_NAME='streaming'
-$env:DB_USER='root' 
