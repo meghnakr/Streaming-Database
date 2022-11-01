@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome page</title>
+    <title>Analyse page</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
     <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
@@ -17,18 +17,31 @@
         <h1>Analyse</h1>
     </div>
 
-    <p>
-        I want to find out the number of new subscribers in the past 6 months.
-    </p>
-
     <form action="/analyse" method="post">
         {% csrf_token %}
+        <p>
+            I want to find out the number of new subscribers in the past
+            <input type="number" name="number" min="0" max="6" step="1" value="6" /> months.
+        </p>
         <input type="submit" class="welcome-button" value="Submit" />
     </form>
 
-    {% for m in medias %}
-    <p class="media-item">month={{m.mth}}, num={{m.num}}</p>
-    {% endfor %}
+    {% if show_table == True %}
+    <div class="table-div media-item">
+        <table>
+            <tr class="media-item">
+                <th>Past # Month(s)</th>
+                <th style="padding: 0 15px">Number of new subscribers</th>
+            </tr>
+            {% for m in medias %}
+            <tr class="media-item">
+                <th>{{m.mth}}</th>
+                <th style="padding: 0 15px">{{m.num}}</th>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
 </body>
 
 </html>

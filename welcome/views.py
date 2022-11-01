@@ -144,13 +144,15 @@ def getMediaFilters(searchMedia):
     return filters
 
 def analyse(request):
-    context = {}
+    context = {'show_table': False}
     if request.method == "POST":
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
-            result = db_conn.execute("CALL getNumNewSubs(6);")
+            stmt = "CALL getNumNewSubs({});".format(request.POST.get("number"))
+            result = db_conn.execute(stmt)
             context = {
-                'medias': result
+                'medias': result,
+                'show_table': True
             }
 
     template = loader.get_template('welcome/analyse.html')
