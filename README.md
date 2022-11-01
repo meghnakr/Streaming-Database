@@ -26,9 +26,8 @@ Database retrieval application for a hypothetical streaming service.
 ## Sanity Check
 1. If you've done everything until now with no errors, you should be able to run the server. 
 2. On the terminal, run `python manage.py runserver`. It should have a link for you (localhost). 
-3. The current path 'http:localhost:/' is an error, and it is fine. Once we settle who's doing what, we will migrate the welcome page to path '/'.
-4. Change the path to 'http:localhost:/welcome' and you should see 5 rows of 'media'.
-5. Change the path to 'http:localhost:/welcome/submit' and you should see a line with a button. 
+4. Change the path to 'http:localhost:/' and you should see rows of medias.
+5. Click on the add, search or analyse button, and it should bring you to those respective pages. 
 
 # Current Project Information
 1. The connection between Cloud MySQL and the project is in `welcome/__init__.py`.
