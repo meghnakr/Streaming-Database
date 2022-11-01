@@ -142,3 +142,16 @@ def getMediaFilters(searchMedia):
     if (not searchMedia.length_in_minutes == None) and (not searchMedia.length_in_minutes == ""):
         filters["length_in_minutes"] = searchMedia.length_in_minutes
     return filters
+
+def analyse(request):
+    context = {}
+    if request.method == "POST":
+        cnx = sqlConnector().engine
+        with cnx.connect() as db_conn:
+            result = db_conn.execute("CALL getNumNewSubs(6);")
+            context = {
+                'medias': result
+            }
+
+    template = loader.get_template('welcome/analyse.html')
+    return HttpResponse(template.render(context, request))

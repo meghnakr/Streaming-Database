@@ -6,4 +6,7 @@ venv
 creds.json
 db.sqlite3
 requirements.txt
+env
+sp_data.sql
+store_procedures.sql
 
