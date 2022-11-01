@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="header">
+        <h1>Analyse</h1>
+    </div>
+
+    <p>
+        I want to find out the number of new subscribers in the past 6 months.
+    </p>
+
+    <form action="/analyse" method="post">
+        {% csrf_token %}
+        <input type="submit" class="welcome-button" value="Submit" />
+    </form>
+
+    {% for m in medias %}
+    <p class="media-item">month={{m.mth}}, num={{m.num}}</p>
+    {% endfor %}
+</body>
+
+</html>

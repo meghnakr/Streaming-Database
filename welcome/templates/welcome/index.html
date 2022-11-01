@@ -1,52 +1,39 @@
-
-
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> {% load static %}
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
     <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
     <title>bootstrap4</title>
     <title>Welcome page</title>
-
-
-
 </head>
 
 <body>
-
     <div class="header">
-        <h1>
-            HBOMinimum
-        </h1>
+        <h1>HBOMinimum</h1>
 
         <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/submit';">
-            Add Media
-        </button>
-    
+        Add Media
+      </button>
+
         <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/search';">
-            Search
-        </button>
-    
-        <button class="welcome-button">
-            Edit
-        </button>
-    
-        <button class="welcome-button">
-            Analyse
-        </button>
+        Search
+      </button>
 
+        <button class="welcome-button">Edit</button>
 
+        <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/analyse';">
+        Analyse
+      </button>
     </div>
 
-
-
-    <div class="table-div"> 
-        <table class = "table table-hover">
+    <div class="table-div">
+        <table class="table table-hover">
             <tr>
                 <th>Media ID</th>
                 <th>Name</th>
@@ -60,29 +47,29 @@
                 <th>Length (mins)</th>
                 <th>Company ID</th>
                 <th>Edit</th>
-
             </tr>
             {% for m in medias %}
             <tr class="media-item">
-                <td>{{m.id}} </td>
-                <td>{{m.name}} </td>
-                <td>{{m.media_type}} </td>
-                <td>{{m.age_rating}} </td>
-                <td>{{m.year_of_release}} </td>
-                <td>{{m.language}} </td>
-                <td>{{m.date_added}} </td>
-                <td>{{m.date_leaving}} </td>
-                <td>{{m.genre}} </td>
-                <td>{{m.length_in_minutes}} </td>
-                <td>{{m.company_id}} </td>
-                <td><a href='{% url 'edit' %}'><button type="button" 
-                    class="btn btn-default"><span 
-                    aria-hidden="true"></span> Edit</button></a></td>
-            </tr>
-            {% endfor %}
-        </table>
+                <td>{{m.id}}</td>
+                <td>{{m.name}}</td>
+                <td>{{m.media_type}}</td>
+                <td>{{m.age_rating}}</td>
+                <td>{{m.year_of_release}}</td>
+                <td>{{m.language}}</td>
+                <td>{{m.date_added}}</td>
+                <td>{{m.date_leaving}}</td>
+                <td>{{m.genre}}</td>
+                <td>{{m.length_in_minutes}}</td>
+                <td>{{m.company_id}}</td>
+                <td>
+                    <a href='{% url "edit" %}'><button type="button" class="btn btn-default">
+                <span aria-hidden="true"></span> Edit
+              </button></a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
-
-
-</body>
+  </body>
 </html>
