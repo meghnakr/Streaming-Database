@@ -1,5 +1,0 @@
-export GOOGLE_APPLICATION_CREDENTIALS='creds.json'
-export INSTANCE_CONNECTION_NAME='cs348project-367000:us-central1:myhbodb' 
-export DB_PASS='richard'  
-export DB_NAME='streaming'
-export DB_USER='root' 
