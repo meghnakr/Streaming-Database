@@ -18,23 +18,16 @@
     </div>    
 
     <div class="inputs">
-        <input type="text" class="edit-input" placeholder="temp Name">
-        <input type="text" class="edit-input" placeholder="temp  Language">
-        <input type="date" class="edit-input" placeholder="temp Date Leaving" required>
-        <input type="text" class="edit-input" placeholder="temp Genre">
-        <input type="text" class="edit-input" placeholder="temp Age Rating">
-        <input type="text" class="edit-input" placeholder="temp Length in Minutes">
-        <input type="text" class="edit-input" placeholder="tempCompany Name">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
     
     </div>
 
 
 
-
-    <form action="put-media" method="post">
-        {% csrf_token %}
-        <input type="submit" class="btn btn-primary" value="Apply Edits" />
-    </form>
 </body>
 
 </html>

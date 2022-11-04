@@ -5,7 +5,12 @@ from django.shortcuts import get_object_or_404, render
 from django.template import loader
 #from .models import Post
 from django import forms
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
+
+from .forms import MediaEditForm
 
 from welcome.db import sqlConnector
 from welcome.models import *
@@ -54,13 +59,61 @@ def submit(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
-def edit(request):
-    #post=get_object_or_404(request.POST)
 
 
-    template = loader.get_template('welcome/edit.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+
+def edit(request, id):
+    cnx = sqlConnector().engine
+    with cnx.connect() as db_conn:
+        session = Session(db_conn)
+        media = session.query(Media).get(id)
+
+        # obj = get_object_or_404(Media, pk=id)
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':        # post means that we are submitting
+            # create a form instance and populate it with data from the request:
+            form = MediaEditForm(request.POST)
+            # check whether it's valid:
+            if form.is_valid():
+                # process the data in form.cleaned_data as required
+                # ...
+                # redirect to a new URL:
+                # grab data from form.cleaned and plug it into my sql alchemy object
+                # Submit the updated properties
+                media.name = form.cleaned_data["name"]
+                media.media_type = form.cleaned_data["media_type"]
+                media.age_rating = form.cleaned_data["age_rating"]
+                media.year_of_release = form.cleaned_data["year_of_release"]
+                media.language = form.cleaned_data["language"]
+                media.date_added = form.cleaned_data["date_added"]
+                media.date_leaving = form.cleaned_data["date_leaving"]
+                media.genre = form.cleaned_data["genre"]
+                media.length_in_minutes = form.cleaned_data["length_in_minutes"]
+
+
+
+                # Commit the data
+                session.add(media)
+                session.commit()   
+                return HttpResponseRedirect(reverse('index'))
+
+        # if a GET (or any other method) we'll create a blank form
+        else:
+            # make a dictionary 
+            formFields = dict(name = media.name, media_type = media.media_type,
+            age_rating = media.age_rating, year_of_release = media.year_of_release,
+            language = media.language, date_added = media.date_added, date_leaving = media.date_leaving,
+            genre = media.genre, length_in_minutes = media.length_in_minutes)
+            form = MediaEditForm(formFields)
+
+            # fill with initial values
+
+    return render(request, 'welcome/edit.html', {'form': form})
+
+
+
+
+
 
 # def put_media(requestx):
 #     if request.method == 'POST':

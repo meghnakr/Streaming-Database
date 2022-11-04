@@ -61,12 +61,9 @@
                 <td>{{m.genre}}</td>
                 <td>{{m.length_in_minutes}}</td>
                 <td>{{m.company_id}}</td>
-                <td>
-                    <a href='{% url "edit" %}'><button type="button" class="btn btn-default">
-                <span aria-hidden="true"></span> Edit
-              </button></a
-            >
-          </td>
+                <td><a href='{% url 'edit' m.id %}'><button type="button" 
+                  class="btn btn-default"><span 
+                  aria-hidden="true"></span> Edit</button></a></td>
         </tr>
         {% endfor %}
       </table>
