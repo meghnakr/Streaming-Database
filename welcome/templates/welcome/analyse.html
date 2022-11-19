@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
     <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js" integrity="sha512-gQhCDsnnnUfaRzD8k1L5llCCV6O9HN09zClIzzeJ8OJ9MpGmIlCxm+pdCkqTwqJ4JcjbojFr79rl2F1mzcoLMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -20,7 +22,11 @@
     <form action="/analyse" method="post">
         {% csrf_token %}
         <p>
-            I want to find out the number of new subscribers in the past
+            I want to find out the number of
+            <select name="subs-type" id="subs-type">
+          <option value="New">new</option>
+          <option value="Lost">old</option>
+        </select> subscribers in the past
             <input type="number" name="number" min="0" max="6" step="1" value="6" /> months.
         </p>
         <input type="submit" class="welcome-button" value="Submit" />
@@ -31,7 +37,7 @@
         <table>
             <tr class="media-item">
                 <th>Past # Month(s)</th>
-                <th style="padding: 0 15px">Number of new subscribers</th>
+                <th style="padding: 0 15px">Number of {{subsType}} subscribers</th>
             </tr>
             {% for m in medias %}
             <tr class="media-item">
@@ -41,7 +47,33 @@
             {% endfor %}
         </table>
     </div>
-    {% endif %}
+    {% endif %} {% if show_table == True %} {%block script%}
+    <script>
+        $(document).ready(function() {
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var myChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: JSON.parse("{{ mths }}"),
+                    datasets: [{
+                        label: "Number of {{subsType}} subscribers",
+                        data: JSON.parse("{{ subs }}"),
+                        borderWidth: 1,
+                    }, ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+    {%endblock script%} {%block content%}
+    <!-- displaying the chart -->
+    <canvas id="myChart" width="300" height="100"></canvas> {%endblock content%} {% endif %}
 </body>
 
 </html>
