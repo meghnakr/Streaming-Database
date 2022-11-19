@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
     <link rel="stylesheet" href="{% static 'welcome/index.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js" integrity="sha512-gQhCDsnnnUfaRzD8k1L5llCCV6O9HN09zClIzzeJ8OJ9MpGmIlCxm+pdCkqTwqJ4JcjbojFr79rl2F1mzcoLMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -41,7 +43,33 @@
             {% endfor %}
         </table>
     </div>
-    {% endif %}
+    {% endif %} {% if show_table == True %} {%block script%}
+    <script>
+        $(document).ready(function() {
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var myChart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: JSON.parse("{{ mths }}"),
+                    datasets: [{
+                        label: "Number of new subscribers",
+                        data: JSON.parse("{{ subs }}"),
+                        borderWidth: 1,
+                    }, ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+    {%endblock script%} {%block content%}
+    <!-- displaying the chart -->
+    <canvas id="myChart" width="300" height="100"></canvas> {%endblock content%} {% endif %}
 </body>
 
 </html>

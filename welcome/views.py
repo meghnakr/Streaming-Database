@@ -1,3 +1,5 @@
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -203,9 +205,18 @@ def analyse(request):
         with cnx.connect() as db_conn:
             stmt = "CALL getNumNewSubs({});".format(request.POST.get("number"))
             result = db_conn.execute(stmt)
+            mths = []
+            subs = []
+            mthSubpairs = list(result)
+            for r in mthSubpairs:
+                mths.append(r.mth)
+                subs.append(r.num)
+
             context = {
-                'medias': result,
-                'show_table': True
+                'medias': mthSubpairs,
+                'show_table': True,
+                'mths': json.dumps(mths),
+                'subs': json.dumps(subs)
             }
 
     template = loader.get_template('welcome/analyse.html')
