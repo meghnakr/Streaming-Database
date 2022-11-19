@@ -22,7 +22,11 @@
     <form action="/analyse" method="post">
         {% csrf_token %}
         <p>
-            I want to find out the number of new subscribers in the past
+            I want to find out the number of
+            <select name="subs-type" id="subs-type">
+          <option value="New">new</option>
+          <option value="Lost">old</option>
+        </select> subscribers in the past
             <input type="number" name="number" min="0" max="6" step="1" value="6" /> months.
         </p>
         <input type="submit" class="welcome-button" value="Submit" />
@@ -33,7 +37,7 @@
         <table>
             <tr class="media-item">
                 <th>Past # Month(s)</th>
-                <th style="padding: 0 15px">Number of new subscribers</th>
+                <th style="padding: 0 15px">Number of {{subsType}} subscribers</th>
             </tr>
             {% for m in medias %}
             <tr class="media-item">
@@ -52,7 +56,7 @@
                 data: {
                     labels: JSON.parse("{{ mths }}"),
                     datasets: [{
-                        label: "Number of new subscribers",
+                        label: "Number of {{subsType}} subscribers",
                         data: JSON.parse("{{ subs }}"),
                         borderWidth: 1,
                     }, ],

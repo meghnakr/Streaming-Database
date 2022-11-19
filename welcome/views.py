@@ -201,9 +201,10 @@ def getMediaFilters(searchMedia):
 def analyse(request):
     context = {'show_table': False}
     if request.method == "POST":
+        subsType = request.POST.get("subs-type")
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
-            stmt = "CALL getNumNewSubs({});".format(request.POST.get("number"))
+            stmt = "CALL getNum{}Subs({});".format(subsType, request.POST.get("number"))
             result = db_conn.execute(stmt)
             mths = []
             subs = []
@@ -216,7 +217,8 @@ def analyse(request):
                 'medias': mthSubpairs,
                 'show_table': True,
                 'mths': json.dumps(mths),
-                'subs': json.dumps(subs)
+                'subs': json.dumps(subs),
+                'subsType': subsType
             }
 
     template = loader.get_template('welcome/analyse.html')
