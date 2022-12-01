@@ -17,21 +17,25 @@
 
     <form action="/submit" method="post" class="inputs">
         {% csrf_token %}
-        <input type="text" class="submit-input" placeholder="Media Name" name="media_name">
-        <input type="text" class="submit-input" placeholder="Media Type" name="media_type">
-        <input type="text" class="submit-input" placeholder="Release Year"  name="release_year">
-        <input type="text" class="submit-input" placeholder="Language" name="language">
+        <input type="text" class="submit-input" placeholder="Media Name" name="media_name"required>
+        <input type="text" class="submit-input" placeholder="Media Type" name="media_type"required>
+        <input type="number" class="submit-input" placeholder="Release Year"  name="release_year"required>
+        <input type="text" class="submit-input" placeholder="Language" name="language"required>
         <input type="date" class="submit-input" placeholder="Date Added" name="date_added"required>
-        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving"required>
-        <input type="text" class="submit-input" placeholder="Genre" name="genre">
-        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating">
-        <input type="text" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes">
-        <input type="text" class="submit-input" placeholder="Company Name" name="company_name">
-        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors">
-        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors">
+        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving" required>
+        <input type="text" class="submit-input" placeholder="Genre" name="genre"required>
+        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating"required>
+        <input type="number" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes"required>
+        <input type="text" class="submit-input" placeholder="Company Name" name="company_name"required>
+        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors"required>
+        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors"required>
         <input type="submit" value="Add!">
     </form>
-
+    {% if success %}
+    <script>
+        alert('Media Successfully Added')
+    </script>
+    {% endif %}
     
     
 
