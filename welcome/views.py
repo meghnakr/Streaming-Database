@@ -23,12 +23,11 @@ from welcome.models import *
 def index(request):
 
     cnx = sqlConnector().engine
-    print("test1")
     with cnx.connect() as db_conn:
-        print("test")
         stmt = select(Media)
 
         result = db_conn.execute(stmt).fetchall()
+
 
     # Do something with the results
     template = loader.get_template('welcome/index.html')
@@ -44,23 +43,6 @@ def submit(request):
         actors = request.POST.get("actors").split(",")
         directors = request.POST.get("directors").split(",")
 
-        #add actors if needed
-        for actor in actors:
-            with cnx.connect() as db_conn:
-                sp = f"""CALL addActor("{actor}");"""
-                print(sp)
-                session = Session(db_conn)
-                session.execute(sp)
-                session.commit()
-
-        #add directors if needed
-        for director in directors:
-            with cnx.connect() as db_conn:
-                sp = f"""CALL addDirector("{director}");"""
-                print(sp)
-                session = Session(db_conn)
-                session.execute(sp)
-                session.commit()
 
         #add company if needed
         company_id = 0
@@ -74,7 +56,7 @@ def submit(request):
             company_id = db_conn.execute(get_company_id).fetchall()[0][0]
 
         
-
+        #initialize a media object
         m = Media(request.POST.get("media_name"),
             request.POST.get("media_type"),
             request.POST.get("age_rating"),
@@ -86,13 +68,48 @@ def submit(request):
             request.POST.get("length_in_minutes"),
             company_id)
 
-
+        media_id = -1
+        #add media object to table
         with cnx.connect() as db_conn:
-            print("test")
-            print(m.age_rating)
             session = Session(db_conn)
             session.add(m)
             session.commit()
+            sp = f"""CALL getMediaId('{request.POST.get("media_name")}', @id)"""
+            db_conn.execute(sp)
+            media_id = db_conn.execute("SELECT @id;").fetchone()[0]
+
+        #add actors if needed and link actors to media
+        for actor in actors:
+            with cnx.connect() as db_conn:
+                sp = f"""CALL addActor("{actor}");"""
+                print(sp)
+                session = Session(db_conn)
+                session.execute(sp)
+                session.commit()
+                sp = f"""CALL getActorId("{actor}", @id);"""
+                db_conn.execute(sp)
+                actor_id = db_conn.execute("SELECT @id;").fetchone()[0]
+                sp = f"""CALL linkActorMedia({media_id}, {actor_id});"""
+                session.execute(sp)
+                session.commit()
+
+        #add directors if needed and link directors to media
+        for director in directors:
+            with cnx.connect() as db_conn:
+                sp = f"""CALL addDirector("{director}");"""
+                print(sp)
+                session = Session(db_conn)
+                session.execute(sp)
+                session.commit()
+                sp = f"""CALL getDirectorId("{director}", @id);"""
+                db_conn.execute(sp)
+                director_id = db_conn.execute("SELECT @id;").fetchone()[0]
+                sp = f"""CALL linkDirectorMedia({media_id}, {director_id});"""
+                session.execute(sp)
+                session.commit()
+        
+
+        #needed to display popup
         success["success"] = True
  
 
