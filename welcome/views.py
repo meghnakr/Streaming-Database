@@ -71,7 +71,7 @@ def submit(request):
             session.execute(sp)
             session.commit()
             get_company_id = f"""SELECT C.id from Company C WHERE name="{request.POST.get("company_name")}";"""
-            company_id = db_conn.execute(get_company_id).fetchall()[0]
+            company_id = db_conn.execute(get_company_id).fetchall()[0][0]
 
         
 
