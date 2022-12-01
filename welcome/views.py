@@ -23,7 +23,9 @@ from welcome.models import *
 def index(request):
 
     cnx = sqlConnector().engine
+    print("test1")
     with cnx.connect() as db_conn:
+        print("test")
         stmt = select(Media)
 
         result = db_conn.execute(stmt).fetchall()
@@ -38,6 +40,41 @@ def index(request):
 def submit(request):
     success = {'success': False}
     if request.method == 'POST':
+        cnx = sqlConnector().engine
+        actors = request.POST.get("actors").split(",")
+        directors = request.POST.get("directors").split(",")
+
+        #add actors if needed
+        for actor in actors:
+            with cnx.connect() as db_conn:
+                sp = f"""CALL addActor("{actor}");"""
+                print(sp)
+                session = Session(db_conn)
+                session.execute(sp)
+                session.commit()
+
+        #add directors if needed
+        for director in directors:
+            with cnx.connect() as db_conn:
+                sp = f"""CALL addDirector("{director}");"""
+                print(sp)
+                session = Session(db_conn)
+                session.execute(sp)
+                session.commit()
+
+        #add company if needed
+        company_id = 0
+        with cnx.connect() as db_conn:
+            sp = f"""CALL addCompany("{request.POST.get("company_name")}");"""
+            print(sp)
+            session = Session(db_conn)
+            session.execute(sp)
+            session.commit()
+            get_company_id = f"""SELECT C.id from Company C WHERE name="{request.POST.get("company_name")}";"""
+            company_id = db_conn.execute(get_company_id).fetchall()[0]
+
+        
+
         m = Media(request.POST.get("media_name"),
             request.POST.get("media_type"),
             request.POST.get("age_rating"),
@@ -46,11 +83,10 @@ def submit(request):
             request.POST.get("date_added"),
             request.POST.get("date_leaving"),
             request.POST.get("genre"),
-            request.POST.get("length_in_minutes"))
-        print(request.POST.get("age_rating"))
-        print(m.age_rating)
+            request.POST.get("length_in_minutes"),
+            company_id)
 
-        cnx = sqlConnector().engine
+
         with cnx.connect() as db_conn:
             print("test")
             print(m.age_rating)
@@ -58,6 +94,9 @@ def submit(request):
             session.add(m)
             session.commit()
         success["success"] = True
+ 
+
+
  
             
     # template = loader.get_template('welcome/submit.html')

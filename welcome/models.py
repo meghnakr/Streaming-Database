@@ -20,7 +20,7 @@ class Media(Base):
     length_in_minutes = Column(Integer)
     company_id = Column(Integer)
 
-    def __init__(self, name, media_type, age_rating, year_of_release, language, date_added, date_leaving, genre, length_in_minutes):
+    def __init__(self, name, media_type, age_rating, year_of_release, language, date_added, date_leaving, genre, length_in_minutes, company_id):
         self.name = name
         self.media_type = media_type
         self.age_rating = age_rating
@@ -30,6 +30,7 @@ class Media(Base):
         self.date_leaving = date_leaving
         self.genre = genre
         self.length_in_minutes = length_in_minutes
+        self.company_id = company_id
 
 class Actor(Base):
 
