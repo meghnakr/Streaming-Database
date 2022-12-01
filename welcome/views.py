@@ -36,6 +36,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def submit(request):
+    success = {'success': False}
     if request.method == 'POST':
         m = Media(request.POST.get("media_name"),
             request.POST.get("media_type"),
@@ -56,10 +57,13 @@ def submit(request):
             session = Session(db_conn)
             session.add(m)
             session.commit()
+        success["success"] = True
+ 
             
-    template = loader.get_template('welcome/submit.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    # template = loader.get_template('welcome/submit.html')
+    # context = {}
+    # return HttpResponse(template.render(context, request))
+    return render(request, 'welcome/submit.html', success)
 
 
 
