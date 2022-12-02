@@ -244,10 +244,11 @@ def getMediaFilters(searchMedia):
 def analyse(request):
     context = {'show_table': False}
     if request.method == "POST":
-        subsType = request.POST.get("subs-type")
+        newLostType = request.POST.get("new-lost-type")
+        subsMediaType = request.POST.get("subs-media-type")
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
-            stmt = "CALL getNum{}Subs({});".format(subsType, request.POST.get("number"))
+            stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
             result = db_conn.execute(stmt)
             mths = []
             subs = []
@@ -261,7 +262,8 @@ def analyse(request):
                 'show_table': True,
                 'mths': json.dumps(mths),
                 'subs': json.dumps(subs),
-                'subsType': subsType
+                'newLostType': newLostType,
+                'subsMediaType': subsMediaType
             }
 
     template = loader.get_template('welcome/analyse.html')
