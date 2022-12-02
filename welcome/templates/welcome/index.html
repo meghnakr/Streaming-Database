@@ -47,6 +47,8 @@
                 <th>Length (mins)</th>
                 <th>Company ID</th>
                 <th>Edit</th>
+                <th>Delete</th>
+
             </tr>
             {% for m in medias %}
             <tr class="media-item">
@@ -61,9 +63,10 @@
                 <td>{{m.genre}}</td>
                 <td>{{m.length_in_minutes}}</td>
                 <td>{{m.company_id}}</td>
-                <td><a href='{% url 'edit' m.id %}'><button type="button" 
-                  class="btn btn-default"><span 
-                  aria-hidden="true"></span> Edit</button></a></td>
+                <td><a href="{% url 'edit' m.id %}"><button type="button" 
+                  class="btn btn-default"> Edit</button></a></td>
+                <td><form onsubmit="return confirm('Are you sure?');" action="{% url 'delete' m.id %}" method="post"><button name="delete" 
+                  class="btn btn-default"> Delete</button> {% csrf_token %} </form></td>
         </tr>
         {% endfor %}
       </table>

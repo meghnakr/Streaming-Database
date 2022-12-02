@@ -10,6 +10,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.shortcuts import redirect
 
 
 from .forms import MediaEditForm
@@ -122,8 +123,24 @@ def submit(request):
     return render(request, 'welcome/submit.html', success)
 
 
+# Delete
+def delete(request, id):
+    cnx = sqlConnector().engine
+    with cnx.connect() as db_conn:
+        session = Session(db_conn)        
+        # use a filter
+            # in the filter, you can filter a certain id
+            # call the delete
+        if request.method == 'POST':        # post means that we are submitting
+            media = session.query(Media).filter(Media.id == id).delete(synchronize_session=False)   # call built-in delete function
+        # Commit the session to save changes to the database
+        session.commit()   
+
+    return redirect('index')
 
 
+
+# Edit
 def edit(request, id):
     cnx = sqlConnector().engine
     with cnx.connect() as db_conn:
