@@ -21,59 +21,95 @@
 
     <form action="/analyse" method="post">
         {% csrf_token %}
-        <p>
-            I want to find out the number of
-            <select name="subs-type" id="subs-type">
-          <option value="New">new</option>
-          <option value="Lost">old</option>
-        </select> subscribers in the past
-            <input type="number" name="number" min="0" max="6" step="1" value="6" /> months.
+        <div id="toggle-option1">
+            <p>
+                I want to find out the number of
+                <select name="new-lost-type" id="new-lost-type">
+            <option value="" selected></option>
+            <option value="New">new</option>
+            <option value="Lost">lost</option>
+          </select> &nbsp;
+                <select name="subs-media-type" id="subs-media-type">
+            <option value="Subs">subscribers</option>
+            <option value="Media">medias</option>
+          </select> &nbsp; in the past
+                <input type="number" name="number" min="0" max="6" step="1" value="6" /> months.
+            </p>
+        </div>
+        <div id="toggle-option2" style="display: none">
+            <p>
+                I want to find out the number of media for each&nbsp;
+                <select name="group-type" id="group-type">
+            <option value="" selected></option>
+            <option value="company">company</option>
+            <option value="actor">actor</option>
+            <option value="director">director</option>
+            <option value="genre">genre</option></select
+          >.
         </p>
-        <input type="submit" class="welcome-button" value="Submit" />
+      </div>
+      <input type="submit" class="welcome-button" value="Submit" />
     </form>
+    <button onclick="changeOption()">More Options</button>
+
+    <script>
+      function changeOption() {
+        var div1 = document.getElementById("toggle-option1");
+        var div2 = document.getElementById("toggle-option2");
+        if (div1.style.display == "none") {
+          div1.style.display = "block";
+          div2.style.display = "none";
+        } else {
+          div1.style.display = "none";
+          div2.style.display = "block";
+        }
+      }
+    </script>
 
     {% if show_table == True %}
     <div class="table-div media-item">
-        <table>
-            <tr class="media-item">
-                <th>Past # Month(s)</th>
-                <th style="padding: 0 15px">Number of {{subsType}} subscribers</th>
-            </tr>
-            {% for m in medias %}
-            <tr class="media-item">
-                <th>{{m.mth}}</th>
-                <th style="padding: 0 15px">{{m.num}}</th>
-            </tr>
-            {% endfor %}
-        </table>
+      <table>
+        <tr class="media-item">
+          <th>{{header1}}</th>
+          <th style="padding: 0 15px">{{header2}}</th>
+        </tr>
+        {% for p in pairs %}
+        <tr class="media-item">
+          <th>{{p.mth}}</th>
+          <th style="padding: 0 15px">{{p.num}}</th>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
     {% endif %} {% if show_table == True %} {%block script%}
     <script>
-        $(document).ready(function() {
-            var ctx = document.getElementById("myChart").getContext("2d");
-            var myChart = new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: JSON.parse("{{ mths }}"),
-                    datasets: [{
-                        label: "Number of {{subsType}} subscribers",
-                        data: JSON.parse("{{ subs }}"),
-                        borderWidth: 1,
-                    }, ],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            });
+      $(document).ready(function () {
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: JSON.parse(`{{ col1 | safe }}`),
+            datasets: [
+              {
+                label: "{{header2}}",
+                data: JSON.parse("{{ col2 }}"),
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
         });
+      });
     </script>
     {%endblock script%} {%block content%}
     <!-- displaying the chart -->
-    <canvas id="myChart" width="300" height="100"></canvas> {%endblock content%} {% endif %}
-</body>
-
+    <canvas id="myChart" width="300" height="100"></canvas> {%endblock content%}
+    {% endif %}
+  </body>
 </html>
