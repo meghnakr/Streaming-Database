@@ -25,6 +25,7 @@
             <p>
                 I want to find out the number of
                 <select name="new-lost-type" id="new-lost-type">
+            <option value="" selected></option>
             <option value="New">new</option>
             <option value="Lost">lost</option>
           </select> &nbsp;
@@ -38,7 +39,8 @@
         <div id="toggle-option2" style="display: none">
             <p>
                 I want to find out the number of media for each&nbsp;
-                <select name="subs-media-type" id="subs-media-type">
+                <select name="group-type" id="group-type">
+            <option value="" selected></option>
             <option value="company">company</option>
             <option value="actor">actor</option>
             <option value="director">director</option>
@@ -68,15 +70,13 @@
     <div class="table-div media-item">
       <table>
         <tr class="media-item">
-          <th>Past # Month(s)</th>
-          <th style="padding: 0 15px">
-            Number of {{newLostType}} {{subsMediaType}}
-          </th>
+          <th>{{header1}}</th>
+          <th style="padding: 0 15px">{{header2}}</th>
         </tr>
-        {% for m in medias %}
+        {% for p in pairs %}
         <tr class="media-item">
-          <th>{{m.mth}}</th>
-          <th style="padding: 0 15px">{{m.num}}</th>
+          <th>{{p.mth}}</th>
+          <th style="padding: 0 15px">{{p.num}}</th>
         </tr>
         {% endfor %}
       </table>
@@ -88,11 +88,11 @@
         var myChart = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: JSON.parse("{{ mths }}"),
+            labels: JSON.parse(`{{ col1 | safe }}`),
             datasets: [
               {
-                label: "Number of {{newLostType}} {{subsMediaType}}",
-                data: JSON.parse("{{ subs }}"),
+                label: "{{header2}}",
+                data: JSON.parse("{{ col2 }}"),
                 borderWidth: 1,
               },
             ],
