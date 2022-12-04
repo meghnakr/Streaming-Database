@@ -45,6 +45,12 @@ def submit(request):
         actors = request.POST.get("actors").split(",")
         directors = request.POST.get("directors").split(",")
 
+        for i in range(len(actors)):
+            actors[i] = actors[i].strip()
+        
+        for i in range(len(directors)):
+            directors[i] = directors[i].strip()
+
        
         session = Session(bind=cnx)
         ###BEGINING OF TRANSACTION###
@@ -214,7 +220,7 @@ def search(request):
         
         companySubquery += "WHERE "
         
-        searchMedia = Media(request.POST.get("media_name"),
+        searchMedia = Media(None, request.POST.get("media_name"),
             request.POST.get("media_type"),
             request.POST.get("age_rating"),
             request.POST.get("release_year"),
@@ -274,12 +280,14 @@ def search(request):
         #if (directorList is not None) and (not directorList == ""):
 
         query = companySubquery
-        
+
         if actorSubquery != "":
-            if query == "":
+            if companySubquery == "":
                 query = actorSubquery
+            elif companySubquery.find("WHERE") == -1:
+                query = actorSubquery + " WHERE EXISTS (" + companySubquery + " WHERE Media.id = T1.id)"
             else:
-                query += " INTERSECT " + actorSubquery
+                query = actorSubquery + " WHERE EXISTS (" + companySubquery + " AND Media.id = T1.id)"
 
         query += ";"
 
