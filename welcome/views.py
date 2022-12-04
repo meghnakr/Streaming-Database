@@ -447,3 +447,33 @@ def analyse(request):
 
     template = loader.get_template('welcome/analyse.html')
     return HttpResponse(template.render(context, request))
+
+# view details of media
+def details(request, id):
+    # query = ("SELECT * FROM " +
+    #     "(Media M LEFT OUTER JOIN (Media_Actor MA JOIN Actor A ON MA.actor_id = A.id) ON M.id = MA.media_id) " +
+    #     "LEFT OUTER JOIN (Media_Director MD JOIN Director D ON MD.director_id = D.id) ON M.id = MD.media_id " +
+    #     "WHERE M.id = " + str(id) + ";")
+
+    mediaCompanyQuery = ("SELECT M.name as media_name, M.date_added, M.date_leaving, M.age_rating, M.language, M.genre, M.length_in_minutes, M.company_id, M.media_type, M.year_of_release, C.name as company_name, C.country" +
+                " FROM Media M JOIN Company C ON M.company_id = C.id WHERE M.id = " + str(id) + ";")
+    actorQuery = "SELECT * FROM Media_Actor MA JOIN Actor A ON MA.actor_id = A.id WHERE MA.media_id = " + str(id) + ";"
+    directorQuery = "SELECT * FROM Media_Director MD JOIN Director D ON MD.director_id = D.id WHERE MD.media_id = " + str(id) + ";" 
+    
+    cnx = sqlConnector().engine
+    with cnx.connect() as db_conn:
+        mediaCompany = db_conn.execute(mediaCompanyQuery).fetchall()
+        actorList = db_conn.execute(actorQuery).fetchall()
+        directorList = db_conn.execute(directorQuery).fetchall()
+        print("Result:")
+        print(mediaCompany)
+        print(actorList)
+        print(directorList)
+    
+    template = loader.get_template('welcome/details.html')
+    context = {
+        'mediaCompany': mediaCompany,
+        'actorList': actorList,
+        'directorList': directorList
+    }
+    return HttpResponse(template.render(context, request))
