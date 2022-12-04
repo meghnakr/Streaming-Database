@@ -277,17 +277,57 @@ def search(request):
             actorSubquery += " GROUP BY M1.id HAVING actorCount = " + str(len(actorList))
             actorSubquery = "SELECT id, name, year_of_release FROM (" + actorSubquery + ") AS T1"
 
-        #if (directorList is not None) and (not directorList == ""):
+        if (directorList is not None) and (not directorList == ""):
+            directorList = directorList.split(",")
+            for i in range(len(directorList)):
+                directorList[i] = directorList[i].strip()
+            
+            directorList = [*set(directorList)] 
+            # this gets rid of duplicates by converting the list to a set and then back to a list
+
+            directorSubquery = "SELECT M2.id, M2.name, M2.year_of_release, count(DISTINCT D.id) AS directorCount "
+            directorSubquery += "FROM (Media_Director MD JOIN Director D ON MD.director_id = D.id) "
+            directorSubquery += "JOIN Media M2 ON MD.media_id = M2.id "
+            directorSubquery += "WHERE "
+            for director in directorList:
+                directorSubquery += "D.name = \"" + director + "\" OR "
+            
+            directorSubquery = directorSubquery.strip()
+            if directorSubquery.endswith("OR"):
+                directorSubquery = directorSubquery[0:len(directorSubquery) - 2]
+                directorSubquery = directorSubquery.strip()
+            if directorSubquery.endswith("WHERE"):
+                directorSubquery = directorSubquery[0:len(directorSubquery) - 5]
+                directorSubquery = directorSubquery.strip()
+            
+            directorSubquery += " GROUP BY M2.id HAVING directorCount = " + str(len(directorList))
+            directorSubquery = "SELECT id, name, year_of_release FROM (" + directorSubquery + ") AS T2"
 
         query = companySubquery
 
         if actorSubquery != "":
-            if companySubquery == "":
+            if query == "":
                 query = actorSubquery
-            elif companySubquery.find("WHERE") == -1:
-                query = actorSubquery + " WHERE EXISTS (" + companySubquery + " WHERE Media.id = T1.id)"
+            elif query.find("WHERE") == -1:
+                query = actorSubquery + " WHERE EXISTS (" + query + " WHERE Media.id = T1.id)"
+                companySubquery += " WHERE "
             else:
-                query = actorSubquery + " WHERE EXISTS (" + companySubquery + " AND Media.id = T1.id)"
+                query = actorSubquery + " WHERE EXISTS (" + query + " AND Media.id = T1.id)"
+        
+        if directorSubquery != "":
+            if query == "":
+                query = directorSubquery
+            elif companySubquery.find("WHERE") == -1:
+                if query.endswith(")"):
+                    query = query[0:len(query)-1]
+                query = directorSubquery + " WHERE EXISTS (" + query + " WHERE Media.id = T2.id)"
+            else:
+                if query.endswith(")"):
+                    query = query[0:len(query)-1]
+                query = directorSubquery + " WHERE EXISTS (" + query + " AND Media.id = T2.id)"
+        
+        if actorSubquery != "" and directorSubquery != "":
+            query += ")"
 
         query += ";"
 
