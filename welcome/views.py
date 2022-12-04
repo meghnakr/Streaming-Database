@@ -214,6 +214,19 @@ def edit(request, id):
 def search(request):
     result = []
     if request.method == 'POST':
+
+        companySubquery = "SELECT Media.id, Media.name, Media.year_of_release "
+        
+        searchCompany = request.POST.get("company_name")
+        actorList = request.POST.get("actors")
+        directorList = request.POST.get("directors")
+
+        if (searchCompany is not None) and (not searchCompany == ""):
+            companySubquery += "FROM Media JOIN Company ON Media.company_id = Company.id "
+        else:
+            companySubquery += "FROM Media "
+        
+        companySubquery += "WHERE "
         
         searchMedia = Media(request.POST.get("media_name"),
             request.POST.get("media_type"),
@@ -223,19 +236,75 @@ def search(request):
             request.POST.get("date_added"),
             request.POST.get("date_leaving"),
             request.POST.get("genre"),
-            request.POST.get("length_in_minutes"))
+            request.POST.get("length_in_minutes"),
+            None)
 
-        searchCompany = request.POST.get("company_name")
+        companySubquery = getMediaFilters(searchMedia, companySubquery)
 
-        mediaFilters = getMediaFilters(searchMedia)
-
-        attributesToReturn = [Media.id, Media.name, Media.year_of_release]
+        if (searchCompany is not None) and (not searchCompany == ""):
+            companySubquery += "Company.name = \"" + searchCompany + "\""
         
+        companySubquery = companySubquery.strip()
+            
+        if companySubquery.endswith("AND"):
+            companySubquery = companySubquery[0:len(companySubquery) - 3]
+            companySubquery = companySubquery.strip()
+        if companySubquery.endswith("WHERE"):
+            #companySubquery = companySubquery[0:len(companySubquery) - 5]
+            #companySubquery = companySubquery.strip()
+            companySubquery = ""
+        
+        print("Company Subquery: " + companySubquery)
+
+        actorSubquery = ""
+        directorSubquery = ""
+
+        if (actorList is not None) and (not actorList == ""):
+            actorList = actorList.split(",")
+            for i in range(len(actorList)):
+                actorList[i] = actorList[i].strip()
+            
+            actorList = [*set(actorList)] 
+            # this gets rid of duplicates by converting the list to a set and then back to a list
+
+            actorSubquery = "SELECT M1.id, M1.name, M1.year_of_release, count(DISTINCT A.id) AS actorCount "
+            actorSubquery += "FROM (Media_Actor MA JOIN Actor A ON MA.actor_id = A.id) "
+            actorSubquery += "JOIN Media M1 ON MA.media_id = M1.id "
+            actorSubquery += "WHERE "
+            for actor in actorList:
+                actorSubquery += "A.name = \"" + actor + "\" OR "
+            
+            actorSubquery = actorSubquery.strip()
+            if actorSubquery.endswith("OR"):
+                actorSubquery = actorSubquery[0:len(actorSubquery) - 2]
+                actorSubquery = actorSubquery.strip()
+            if actorSubquery.endswith("WHERE"):
+                actorSubquery = actorSubquery[0:len(actorSubquery) - 5]
+                actorSubquery = actorSubquery.strip()
+            
+            actorSubquery += " GROUP BY M1.id HAVING actorCount = " + str(len(actorList))
+            actorSubquery = "SELECT id, name, year_of_release FROM (" + actorSubquery + ") AS T1"
+
+        #if (directorList is not None) and (not directorList == ""):
+
+        query = companySubquery
+        
+        if actorSubquery != "":
+            if query == "":
+                query = actorSubquery
+            else:
+                query += " INTERSECT " + actorSubquery
+
+        query += ";"
+
+        print("Query: " + query)
+
         cnx = sqlConnector().engine
         with cnx.connect() as db_conn:
-            session = Session(db_conn)
-            statement = select(*attributesToReturn).filter_by(**mediaFilters)
-            result = session.execute(statement).all()
+            # session = Session(db_conn)
+            # statement = select(*attributesToReturn).filter_by(**mediaFilters)
+            # result = session.execute(statement).all()
+            result = db_conn.execute(query).fetchall()
             print("Result:")
             print(result)
     
@@ -245,35 +314,45 @@ def search(request):
     }
     return HttpResponse(template.render(context, request))
 
-def getMediaFilters(searchMedia):
-    filters = {}
+def getMediaFilters(searchMedia, query):
+
     if (not searchMedia.name == None) and (not searchMedia.name == ""):
-        filters["name"] = searchMedia.name
-    
+        #filters["name"] = searchMedia.name
+        query += "Media.name = \"" + searchMedia.name + "\" AND "
+
     if (not searchMedia.media_type == None) and (not searchMedia.media_type == ""):
-        filters["media_type"] = searchMedia.media_type
+        #filters["media_type"] = searchMedia.media_type
+        query += "Media.media_type = \"" + searchMedia.media_type + "\" AND "
     
     if (not searchMedia.age_rating == None) and (not searchMedia.age_rating == ""):
-        filters["age_rating"] = searchMedia.age_rating
+        #filters["age_rating"] = searchMedia.age_rating
+        query += "Media.age_rating = \"" + searchMedia.age_rating + "\" AND "
     
     if (not searchMedia.year_of_release == None) and (not searchMedia.year_of_release == ""):
-        filters["year_of_release"] = searchMedia.year_of_release
+        #filters["year_of_release"] = searchMedia.year_of_release
+        query += "Media.year_of_release = \"" + searchMedia.year_of_release + "\" AND "
     
     if (not searchMedia.language == None) and (not searchMedia.language == ""):
-        filters["language"] = searchMedia.language
+        #filters["language"] = searchMedia.language
+        query += "Media.language = \"" + searchMedia.language + "\" AND "
     
     if (not searchMedia.date_added == None) and (not searchMedia.date_added == ""):
-        filters["date_added"] = searchMedia.date_added
+        #filters["date_added"] = searchMedia.date_added
+        query += "Media.date_added = \"" + searchMedia.date_added + "\" AND "
     
     if (not searchMedia.date_leaving == None) and (not searchMedia.date_leaving == ""):
-        filters["date_leaving"] = searchMedia.date_leaving
+        #filters["date_leaving"] = searchMedia.date_leaving
+        query += "Media.date_leaving = \"" + searchMedia.date_leaving + "\" AND "
     
     if (not searchMedia.genre == None) and (not searchMedia.genre == ""):
-        filters["genre"] = searchMedia.genre
+        #filters["Media.genre"] = searchMedia.genre
+        query += "Media.genre = \"" + searchMedia.genre + "\" AND "
     
     if (not searchMedia.length_in_minutes == None) and (not searchMedia.length_in_minutes == ""):
-        filters["length_in_minutes"] = searchMedia.length_in_minutes
-    return filters
+        #filters["length_in_minutes"] = searchMedia.length_in_minutes
+        query += "Media.length_in_minutes = \"" + searchMedia.length_in_minutes + "\" AND "
+
+    return query
 
 def analyse(request):
     context = {'show_table': False}
