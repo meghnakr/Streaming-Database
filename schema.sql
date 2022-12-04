@@ -12,6 +12,14 @@ CREATE TABLE Media(
    year_of_release year
 );
 
+CREATE INDEX media_name_idx ON Media(name ASC);
+CREATE INDEX date_added_idx ON Media(date_added ASC);
+CREATE INDEX date_leaving_idx ON Media(date_leaving ASC);
+CREATE INDEX language_idx ON Media(language ASC);
+CREATE INDEX genre_idx ON Media(genre ASC);
+CREATE INDEX length_in_minutes_idx ON Media(length_in_minutes ASC);
+CREATE INDEX year_of_release_idx ON Media(year_of_release ASC);
+
 CREATE TABLE Subscribers(
    id integer PRIMARY KEY,
    name varchar(50),
@@ -20,6 +28,8 @@ CREATE TABLE Subscribers(
    start_date date,
    end_date date
 );
+
+CREATE INDEX start_date_idx ON Subscribers(start_date ASC);
 
 CREATE TABLE Plan(
    plan_type varchar(50) PRIMARY KEY,
@@ -35,11 +45,15 @@ CREATE TABLE Profile (
    PRIMARY KEY (profile_id, subscriber_id)
 );
 
+CREATE INDEX profile_idx ON Profile(name ASC);
+
 CREATE TABLE Actor(
    id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
+
+CREATE INDEX actor_name_idx ON Actor(name ASC);
 
 CREATE TABLE Director(
    id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -47,12 +61,15 @@ CREATE TABLE Director(
    country varchar(50)
 );
 
+CREATE INDEX director_name_idx ON Director(name ASC);
+
 CREATE TABLE Company(
    id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
    name varchar(50),
    country varchar(50)
 );
 
+CREATE INDEX company_name_idx ON Company(name ASC);
 
 CREATE TABLE Media_Director(
    media_id integer,

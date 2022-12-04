@@ -3,6 +3,10 @@ form {
     color: white;
 }
 
+button {
+    background-color: var(--background-color);
+    color: white;
+}
 
 .inputs {
     display: grid;
