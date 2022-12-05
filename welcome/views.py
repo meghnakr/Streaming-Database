@@ -101,33 +101,28 @@ def submit(request):
             sp = text("""CALL linkDirectorMedia(:mediaId, :directorId)""")
             session.execute(sp, {"mediaId" : media_id, "directorId" : director_id})
         session.commit()
+        ###END OF TRANSACTION###
         
 
         #needed to display popup
         success["success"] = True
- 
 
-
- 
-            
-    # template = loader.get_template('welcome/submit.html')
-    # context = {}
-    # return HttpResponse(template.render(context, request))
     return render(request, 'welcome/submit.html', success)
 
 
 # Delete
 def delete(request, id):
     cnx = sqlConnector().engine
-    with cnx.connect() as db_conn:
-        session = Session(db_conn)        
-        # use a filter
-            # in the filter, you can filter a certain id
-            # call the delete
-        if request.method == 'POST':        # post means that we are submitting
-            media = session.query(Media).filter(Media.id == id).delete(synchronize_session=False)   # call built-in delete function
-        # Commit the session to save changes to the database
-        session.commit()   
+    session = Session(bind=cnx)
+    ###BEGINING OF TRANSACTION###
+    session.connection(execution_options={"isolation_level" : "REPEATABLE READ"})      
+    # use a filter
+        # in the filter, you can filter a certain id
+        # call the delete
+    if request.method == 'POST':        # post means that we are submitting
+        media = session.query(Media).filter(Media.id == id).delete(synchronize_session=False)   # call built-in delete function
+    # Commit the session to save changes to the database
+    session.commit()   
 
     return redirect('index')
 
@@ -136,47 +131,50 @@ def delete(request, id):
 # Edit
 def edit(request, id):
     cnx = sqlConnector().engine
-    with cnx.connect() as db_conn:
-        session = Session(db_conn)
-        media = session.query(Media).get(id)
+    session = Session(bind=cnx)
+    ###BEGINING OF TRANSACTION###
+    session.connection(execution_options={"isolation_level" : "REPEATABLE READ"})      
+    media = session.query(Media).get(id)
 
-        # obj = get_object_or_404(Media, pk=id)
-        # if this is a POST request we need to process the form data
-        if request.method == 'POST':        # post means that we are submitting
-            # create a form instance and populate it with data from the request:
-            form = MediaEditForm(request.POST)
-            # check whether it's valid:
-            if form.is_valid():
-                # process the data in form.cleaned_data as required
-                # ...
-                # redirect to a new URL:
-                # grab data from form.cleaned and plug it into my sql alchemy object
-                # Submit the updated properties
-                media.name = form.cleaned_data["name"]
-                media.media_type = form.cleaned_data["media_type"]
-                media.age_rating = form.cleaned_data["age_rating"]
-                media.year_of_release = form.cleaned_data["year_of_release"]
-                media.language = form.cleaned_data["language"]
-                media.date_added = form.cleaned_data["date_added"]
-                media.date_leaving = form.cleaned_data["date_leaving"]
-                media.genre = form.cleaned_data["genre"]
-                media.length_in_minutes = form.cleaned_data["length_in_minutes"]
+    # obj = get_object_or_404(Media, pk=id)
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':        # post means that we are submitting
+        # create a form instance and populate it with data from the request:
+        form = MediaEditForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            # grab data from form.cleaned and plug it into my sql alchemy object
+            # Submit the updated properties
+            media.name = form.cleaned_data["name"]
+            media.media_type = form.cleaned_data["media_type"]
+            media.age_rating = form.cleaned_data["age_rating"]
+            media.year_of_release = form.cleaned_data["year_of_release"]
+            media.language = form.cleaned_data["language"]
+            media.date_added = form.cleaned_data["date_added"]
+            media.date_leaving = form.cleaned_data["date_leaving"]
+            media.genre = form.cleaned_data["genre"]
+            media.length_in_minutes = form.cleaned_data["length_in_minutes"]
 
 
 
-                # Commit the data
-                session.add(media)
-                session.commit()   
-                return HttpResponseRedirect(reverse('index'))
+            # Commit the data
+            session.add(media)
+            session.commit()
+        ###END OF TRANSACTION###
+            return HttpResponseRedirect(reverse('index'))
 
-        # if a GET (or any other method) we'll create a blank form
-        else:
-            # make a dictionary 
-            formFields = dict(name = media.name, media_type = media.media_type,
-            age_rating = media.age_rating, year_of_release = media.year_of_release,
-            language = media.language, date_added = media.date_added, date_leaving = media.date_leaving,
-            genre = media.genre, length_in_minutes = media.length_in_minutes)
-            form = MediaEditForm(formFields)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        # make a dictionary 
+        formFields = dict(name = media.name, media_type = media.media_type,
+        age_rating = media.age_rating, year_of_release = media.year_of_release,
+        language = media.language, date_added = media.date_added, date_leaving = media.date_leaving,
+        genre = media.genre, length_in_minutes = media.length_in_minutes)
+        form = MediaEditForm(formFields)
 
             # fill with initial values
 
@@ -418,60 +416,68 @@ def getMediaFilters(searchMedia, query):
 
 def analyse(request):
     context = {'show_table': False}
+    print(request.method)
     if request.method == "POST":
         groupType = request.POST.get("group-type")
         newLostType = request.POST.get("new-lost-type")
         subsMediaType = request.POST.get("subs-media-type")
-        cnx = sqlConnector().engine
+
+        if groupType == "" and newLostType == "":
+            template = loader.get_template('welcome/analyse.html')
+            return HttpResponse(template.render(context, request))
 
         if groupType is not None and groupType != "":
-            with cnx.connect() as db_conn:
-                if groupType == "company":
-                    stmt = "SELECT Company.name AS mth, COUNT(*) AS num FROM Media JOIN Company ON Media.company_id = Company.id GROUP BY Company.id;"
-                elif groupType == "actor":
-                    stmt = "SELECT Actor.name AS mth, COUNT(*) AS num FROM Media_Actor JOIN Actor ON Media_Actor.actor_id = Actor.id GROUP BY Actor.id;"
-                elif groupType == "director":
-                    stmt = "SELECT Director.name AS mth, COUNT(*) AS num FROM Media_Director JOIN Director ON Media_Director.director_id = Director.id GROUP BY Director.id;"
-                elif groupType == "genre":
-                    stmt = "SELECT genre AS mth, COUNT(*) AS num FROM Media GROUP BY genre;"
-                result = db_conn.execute(stmt)
-                name = []
-                num = []
-                nameNumpairs = list(result)
-                for r in nameNumpairs:
-                    name.append(r.mth)
-                    num.append(r.num)
-                
-                print(name)
-                print(num)
-                context = {
-                    'pairs': nameNumpairs,
-                    'show_table': True,
-                    'header1': groupType,
-                    'header2': "The number of media",
-                    'col1': json.dumps(name),
-                    'col2': json.dumps(num),
-                }
+            cnx = sqlConnector().engine
+            session = Session(bind=cnx)
+            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
+            if groupType == "company":
+                stmt = "SELECT Company.name AS mth, COUNT(*) AS num FROM Media JOIN Company ON Media.company_id = Company.id GROUP BY Company.id;"
+            elif groupType == "actor":
+                stmt = "SELECT Actor.name AS mth, COUNT(*) AS num FROM Media_Actor JOIN Actor ON Media_Actor.actor_id = Actor.id GROUP BY Actor.id;"
+            elif groupType == "director":
+                stmt = "SELECT Director.name AS mth, COUNT(*) AS num FROM Media_Director JOIN Director ON Media_Director.director_id = Director.id GROUP BY Director.id;"
+            elif groupType == "genre":
+                stmt = "SELECT genre AS mth, COUNT(*) AS num FROM Media GROUP BY genre;"
+            result = session.execute(stmt)
+            session.commit()
+            name = []
+            num = []
+            nameNumpairs = list(result)
+            for r in nameNumpairs:
+                name.append(r.mth)
+                num.append(r.num)
+            
+            context = {
+                'pairs': nameNumpairs,
+                'show_table': True,
+                'header1': groupType,
+                'header2': "The number of media",
+                'col1': json.dumps(name),
+                'col2': json.dumps(num),
+            }
 
         else:
-            with cnx.connect() as db_conn:
-                stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
-                result = db_conn.execute(stmt)
-                mths = []
-                subs = []
-                mthSubpairs = list(result)
-                for r in mthSubpairs:
-                    mths.append(r.mth)
-                    subs.append(r.num)
+            cnx = sqlConnector().engine
+            session = Session(bind=cnx)
+            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
+            stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
+            result = session.execute(stmt)
+            session.commit()
+            mths = []
+            subs = []
+            mthSubpairs = list(result)
+            for r in mthSubpairs:
+                mths.append(r.mth)
+                subs.append(r.num)
 
-                context = {
-                    'pairs': mthSubpairs,
-                    'show_table': True,
-                    'header1': "The past # Months",
-                    'header2': "The number of {} {}".format(newLostType, subsMediaType),
-                    'col1': json.dumps(mths),
-                    'col2': json.dumps(subs),
-                }
+            context = {
+                'pairs': mthSubpairs,
+                'show_table': True,
+                'header1': "The past # Months",
+                'header2': "The number of {} {}".format(newLostType, subsMediaType),
+                'col1': json.dumps(mths),
+                'col2': json.dumps(subs),
+            }
 
     template = loader.get_template('welcome/analyse.html')
     return HttpResponse(template.render(context, request))
