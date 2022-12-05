@@ -282,9 +282,16 @@ def analyse(request):
         newLostType = request.POST.get("new-lost-type")
         subsMediaType = request.POST.get("subs-media-type")
         cnx = sqlConnector().engine
+        
+        if groupType == "" and newLostType == "":
+            template = loader.get_template('welcome/analyse.html')
+            return HttpResponse(template.render(context, request))
 
         if groupType is not None and groupType != "":
-            with cnx.connect() as db_conn:
+            with cnx.connect().execution_options(
+                isolation_level="READ UNCOMMITTED"
+            ) as db_conn:
+                tx = db_conn.begin()
                 if groupType == "company":
                     stmt = "SELECT Company.name AS mth, COUNT(*) AS num FROM Media JOIN Company ON Media.company_id = Company.id GROUP BY Company.id;"
                 elif groupType == "actor":
@@ -294,6 +301,7 @@ def analyse(request):
                 elif groupType == "genre":
                     stmt = "SELECT genre AS mth, COUNT(*) AS num FROM Media GROUP BY genre;"
                 result = db_conn.execute(stmt)
+                tx.commit()
                 name = []
                 num = []
                 nameNumpairs = list(result)
@@ -301,8 +309,6 @@ def analyse(request):
                     name.append(r.mth)
                     num.append(r.num)
                 
-                print(name)
-                print(num)
                 context = {
                     'pairs': nameNumpairs,
                     'show_table': True,
@@ -315,7 +321,9 @@ def analyse(request):
         else:
             with cnx.connect() as db_conn:
                 stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
+                tx = db_conn.begin()
                 result = db_conn.execute(stmt)
+                tx.commit()
                 mths = []
                 subs = []
                 mthSubpairs = list(result)
