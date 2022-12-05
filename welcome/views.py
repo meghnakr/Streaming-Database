@@ -17,6 +17,7 @@ from .forms import MediaEditForm
 
 from welcome.db import sqlConnector
 from welcome.models import *
+
 #class PostForm(forms.ModelForm):
  #   class Meta:
   #      model = Post
@@ -230,11 +231,13 @@ def search(request):
             request.POST.get("genre"),
             request.POST.get("length_in_minutes"),
             None)
-
-        companySubquery = getMediaFilters(searchMedia, companySubquery)
+        
+        companySubquery, filters = getMediaFilters(searchMedia, companySubquery)
 
         if (searchCompany is not None) and (not searchCompany == ""):
-            companySubquery += "Company.name = \"" + searchCompany + "\""
+            filters["company_name"] = searchCompany
+            #companySubquery += "Company.name = \"" + searchCompany + "\""
+            companySubquery += "Company.name = :company_name AND "
         
         companySubquery = companySubquery.strip()
             
@@ -263,8 +266,11 @@ def search(request):
             actorSubquery += "FROM (Media_Actor MA JOIN Actor A ON MA.actor_id = A.id) "
             actorSubquery += "JOIN Media M1 ON MA.media_id = M1.id "
             actorSubquery += "WHERE "
-            for actor in actorList:
-                actorSubquery += "A.name = \"" + actor + "\" OR "
+            for i in range(len(actorList)):
+                actor = actorList[i]
+                filters["actor" + str(i)] = actor
+                #actorSubquery += "A.name = \"" + actor + "\" OR "
+                actorSubquery += "A.name = :actor" + str(i) + " OR "
             
             actorSubquery = actorSubquery.strip()
             if actorSubquery.endswith("OR"):
@@ -289,8 +295,11 @@ def search(request):
             directorSubquery += "FROM (Media_Director MD JOIN Director D ON MD.director_id = D.id) "
             directorSubquery += "JOIN Media M2 ON MD.media_id = M2.id "
             directorSubquery += "WHERE "
-            for director in directorList:
-                directorSubquery += "D.name = \"" + director + "\" OR "
+            for i in range(len(directorList)):
+                director = directorList[i]
+                filters["director" + str(i)] = director
+                #directorSubquery += "D.name = \"" + director + "\" OR "
+                directorSubquery += "D.name = :director" + str(i) + " OR "
             
             directorSubquery = directorSubquery.strip()
             if directorSubquery.endswith("OR"):
@@ -334,13 +343,21 @@ def search(request):
         print("Query: " + query)
 
         cnx = sqlConnector().engine
-        with cnx.connect() as db_conn:
-            # session = Session(db_conn)
-            # statement = select(*attributesToReturn).filter_by(**mediaFilters)
-            # result = session.execute(statement).all()
-            result = db_conn.execute(query).fetchall()
-            print("Result:")
-            print(result)
+        session = Session(bind=cnx)
+        session.connection(execution_options={"isolation_level" : "READ UNCOMMITTED"})
+        result = session.execute(query, filters)
+        # with cnx.connect() as db_conn:
+        #     query = "SELECT M.id, M.name FROM Media M WHERE Media.genre = ? AND Media.language = ?;"
+        #     #result = session.execute(query, (1, "Animation"), (2, "English")).fetchall()
+        #     result = db_conn.execute(query, ("Animation", "English")).fetchall()
+        #     print("Result:")
+        #     print(result)
+        #query = text("SELECT M.id, M.name FROM Media M WHERE M.genre = :genre AND M.language = :language ;")
+        #result = session.execute(query, ("Animation", "Language")).fetchall()
+        #result = session.execute(query, {"genre" : "Animation", "language": "English"})
+        print("Result:")
+        print(result)
+        session.commit()
     
     template = loader.get_template('welcome/search.html')
     context = {
@@ -350,43 +367,54 @@ def search(request):
 
 def getMediaFilters(searchMedia, query):
 
+    filters = {}
+
     if (not searchMedia.name == None) and (not searchMedia.name == ""):
-        #filters["name"] = searchMedia.name
-        query += "Media.name = \"" + searchMedia.name + "\" AND "
+        filters["media_name"] = searchMedia.name
+        #query += "Media.name = \"" + searchMedia.name + "\" AND "
+        query += "Media.name = :media_name AND "
 
     if (not searchMedia.media_type == None) and (not searchMedia.media_type == ""):
-        #filters["media_type"] = searchMedia.media_type
-        query += "Media.media_type = \"" + searchMedia.media_type + "\" AND "
+        filters["media_type"] = searchMedia.media_type
+        #query += "Media.media_type = \"" + searchMedia.media_type + "\" AND "
+        query += "Media.media_type = :media_type AND "
     
     if (not searchMedia.age_rating == None) and (not searchMedia.age_rating == ""):
-        #filters["age_rating"] = searchMedia.age_rating
-        query += "Media.age_rating = \"" + searchMedia.age_rating + "\" AND "
+        filters["age_rating"] = searchMedia.age_rating
+        #query += "Media.age_rating = \"" + searchMedia.age_rating + "\" AND "
+        query += "Media.age_rating = :age_rating AND "
     
     if (not searchMedia.year_of_release == None) and (not searchMedia.year_of_release == ""):
-        #filters["year_of_release"] = searchMedia.year_of_release
-        query += "Media.year_of_release = \"" + searchMedia.year_of_release + "\" AND "
+        filters["year_of_release"] = searchMedia.year_of_release
+        #query += "Media.year_of_release = \"" + searchMedia.year_of_release + "\" AND "
+        query += "Media.year_of_release = :year_of_release AND "
     
     if (not searchMedia.language == None) and (not searchMedia.language == ""):
-        #filters["language"] = searchMedia.language
-        query += "Media.language = \"" + searchMedia.language + "\" AND "
+        filters["language"] = searchMedia.language
+        #query += "Media.language = \"" + searchMedia.language + "\" AND "
+        query += "Media.language = :language AND "
     
     if (not searchMedia.date_added == None) and (not searchMedia.date_added == ""):
-        #filters["date_added"] = searchMedia.date_added
-        query += "Media.date_added = \"" + searchMedia.date_added + "\" AND "
+        filters["date_added"] = searchMedia.date_added
+        #query += "Media.date_added = \"" + searchMedia.date_added + "\" AND "
+        query += "Media.date_added = :date_added AND "
     
     if (not searchMedia.date_leaving == None) and (not searchMedia.date_leaving == ""):
-        #filters["date_leaving"] = searchMedia.date_leaving
-        query += "Media.date_leaving = \"" + searchMedia.date_leaving + "\" AND "
+        filters["date_leaving"] = searchMedia.date_leaving
+        #query += "Media.date_leaving = \"" + searchMedia.date_leaving + "\" AND "
+        query += "Media.date_leaving = :date_leaving AND "
     
     if (not searchMedia.genre == None) and (not searchMedia.genre == ""):
-        #filters["Media.genre"] = searchMedia.genre
-        query += "Media.genre = \"" + searchMedia.genre + "\" AND "
+        filters["genre"] = searchMedia.genre
+        #query += "Media.genre = \"" + searchMedia.genre + "\" AND "
+        query += "Media.genre = :genre AND "
     
     if (not searchMedia.length_in_minutes == None) and (not searchMedia.length_in_minutes == ""):
-        #filters["length_in_minutes"] = searchMedia.length_in_minutes
-        query += "Media.length_in_minutes = \"" + searchMedia.length_in_minutes + "\" AND "
+        filters["length_in_minutes"] = searchMedia.length_in_minutes
+        #query += "Media.length_in_minutes = \"" + searchMedia.length_in_minutes + "\" AND "
+        query += "Media.length_in_minutes = :length_in_minutes AND "
 
-    return query
+    return query, filters
 
 def analyse(request):
     context = {'show_table': False}
