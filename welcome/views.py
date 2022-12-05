@@ -392,54 +392,53 @@ def getMediaFilters(searchMedia, query):
 
 def analyse(request):
     context = {'show_table': False}
+    print(request.method)
     if request.method == "POST":
         groupType = request.POST.get("group-type")
         newLostType = request.POST.get("new-lost-type")
         subsMediaType = request.POST.get("subs-media-type")
-        cnx = sqlConnector().engine
-        
+
         if groupType == "" and newLostType == "":
             template = loader.get_template('welcome/analyse.html')
             return HttpResponse(template.render(context, request))
 
         if groupType is not None and groupType != "":
-            with cnx.connect().execution_options(
-                isolation_level="READ UNCOMMITTED"
-            ) as db_conn:
-                tx = db_conn.begin()
-                if groupType == "company":
-                    stmt = "SELECT Company.name AS mth, COUNT(*) AS num FROM Media JOIN Company ON Media.company_id = Company.id GROUP BY Company.id;"
-                elif groupType == "actor":
-                    stmt = "SELECT Actor.name AS mth, COUNT(*) AS num FROM Media_Actor JOIN Actor ON Media_Actor.actor_id = Actor.id GROUP BY Actor.id;"
-                elif groupType == "director":
-                    stmt = "SELECT Director.name AS mth, COUNT(*) AS num FROM Media_Director JOIN Director ON Media_Director.director_id = Director.id GROUP BY Director.id;"
-                elif groupType == "genre":
-                    stmt = "SELECT genre AS mth, COUNT(*) AS num FROM Media GROUP BY genre;"
-                result = db_conn.execute(stmt)
-                tx.commit()
-                name = []
-                num = []
-                nameNumpairs = list(result)
-                for r in nameNumpairs:
-                    name.append(r.mth)
-                    num.append(r.num)
-                
-                context = {
-                    'pairs': nameNumpairs,
-                    'show_table': True,
-                    'header1': groupType,
-                    'header2': "The number of media",
-                    'col1': json.dumps(name),
-                    'col2': json.dumps(num),
-                }
+            cnx = sqlConnector().engine
+            session = Session(bind=cnx)
+            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
+            if groupType == "company":
+                stmt = "SELECT Company.name AS mth, COUNT(*) AS num FROM Media JOIN Company ON Media.company_id = Company.id GROUP BY Company.id;"
+            elif groupType == "actor":
+                stmt = "SELECT Actor.name AS mth, COUNT(*) AS num FROM Media_Actor JOIN Actor ON Media_Actor.actor_id = Actor.id GROUP BY Actor.id;"
+            elif groupType == "director":
+                stmt = "SELECT Director.name AS mth, COUNT(*) AS num FROM Media_Director JOIN Director ON Media_Director.director_id = Director.id GROUP BY Director.id;"
+            elif groupType == "genre":
+                stmt = "SELECT genre AS mth, COUNT(*) AS num FROM Media GROUP BY genre;"
+            result = session.execute(stmt)
+            session.commit()
+            name = []
+            num = []
+            nameNumpairs = list(result)
+            for r in nameNumpairs:
+                name.append(r.mth)
+                num.append(r.num)
+            
+            context = {
+                'pairs': nameNumpairs,
+                'show_table': True,
+                'header1': groupType,
+                'header2': "The number of media",
+                'col1': json.dumps(name),
+                'col2': json.dumps(num),
+            }
 
         else:
             cnx = sqlConnector().engine
             session = Session(bind=cnx)
-            ###BEGINING OF TRANSACTION###
-            session.connection(execution_options={"isolation_level" : "READ UNCOMMITTED"})   
+            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
             stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
             result = session.execute(stmt)
+            session.commit()
             mths = []
             subs = []
             mthSubpairs = list(result)
@@ -455,7 +454,6 @@ def analyse(request):
                 'col1': json.dumps(mths),
                 'col2': json.dumps(subs),
             }
-            session.commit()
 
     template = loader.get_template('welcome/analyse.html')
     return HttpResponse(template.render(context, request))
