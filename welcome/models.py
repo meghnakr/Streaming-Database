@@ -8,7 +8,7 @@ Base = declarative_base()
 class Media(Base):
     __tablename__ = "Media"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     media_type = Column(String)
     age_rating = Column(String)
@@ -20,7 +20,8 @@ class Media(Base):
     length_in_minutes = Column(Integer)
     company_id = Column(Integer)
 
-    def __init__(self, name, media_type, age_rating, year_of_release, language, date_added, date_leaving, genre, length_in_minutes, company_id):
+    def __init__(self, id, name, media_type, age_rating, year_of_release, language, date_added, date_leaving, genre, length_in_minutes, company_id):
+        self.id = id
         self.name = name
         self.media_type = media_type
         self.age_rating = age_rating
