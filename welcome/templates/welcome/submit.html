@@ -2,9 +2,9 @@
 <html lang="en-US">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome page</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
@@ -13,41 +13,36 @@
 </head>
 
 <body>
-
+    <div class="header">
+        <h1>
+            Add Media<span></span>
+            <button onclick="history.back()" class="btn btn-primary" style="background-color: black; color: white">
+          Go Back
+        </button>
+        </h1>
+    </div>
 
     <form action="/submit" method="post" class="inputs">
         {% csrf_token %}
-        <input type="text" class="submit-input" placeholder="Media Name" name="media_name"required>
-        <input type="text" class="submit-input" placeholder="Media Type" name="media_type"required>
-        <input type="number" class="submit-input" placeholder="Release Year"  name="release_year"required>
-        <input type="text" class="submit-input" placeholder="Language" name="language"required>
-        <input type="date" class="submit-input" placeholder="Date Added" name="date_added"required>
-        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving" required>
-        <input type="text" class="submit-input" placeholder="Genre" name="genre"required>
-        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating"required>
-        <input type="number" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes"required>
-        <input type="text" class="submit-input" placeholder="Company Name" name="company_name"required>
-        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors"required>
-        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors"required>
-        <input type="submit" value="Add!">
+        <input type="text" class="submit-input" placeholder="Media Name" name="media_name" required />
+        <input type="text" class="submit-input" placeholder="Media Type" name="media_type" required />
+        <input type="number" class="submit-input" placeholder="Release Year" name="release_year" required />
+        <input type="text" class="submit-input" placeholder="Language" name="language" required />
+        <input type="date" class="submit-input" placeholder="Date Added" name="date_added" required />
+        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving" required />
+        <input type="text" class="submit-input" placeholder="Genre" name="genre" required />
+        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating" required />
+        <input type="number" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes" required />
+        <input type="text" class="submit-input" placeholder="Company Name" name="company_name" required />
+        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors" required />
+        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors" required />
+        <input type="submit" value="Add!" />
     </form>
     {% if success %}
     <script>
-        alert('Media Successfully Added')
+        alert("Media Successfully Added");
     </script>
     {% endif %}
-    
-    
-
-
-
-
-
-    <!-- <form action="put-media" method="post">
-        {% csrf_token %}
-        <label>This button will add a fixed media to the database. </label>
-        <input type="submit" class="btn btn-primary" value="OK" />
-    </form> -->
 </body>
 
 </html>
