@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en-US">
-
+<html lang="en-US"  >
+    
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,31 +11,30 @@
     <link rel="stylesheet" href="{% static 'welcome/details.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
 </head>
+<body style="background-color:#373535"> 
 
-<body> 
 
     {% for m in mediaCompany %}
-    <h4>{{m.media_name}} ({{m.year_of_release}})<h4>
-    <h6>{{m.media_type}}</h6>
-    <h6>Company: {{m.company_name}}</h6>
-    <h6>Date Added: {{m.date_added}}</h6>
-    <h6>Date Leaving: {{m.date_leaving}}</h6>
-    <h6>Age Rating: {{m.age_rating}}</h6>
-    <h6>Language: {{m.language}}</h6>
-    <h6>Genre: {{m.genre}}</h6>
-    <h6>Duration: {{m.length_in_minutes}} minutes</h6>
+    <h4 style="color:white"> {{m.media_name}} ({{m.year_of_release}})<h4>
+    <h6 style="color:white">{{m.media_type}}</h6>
+    <h6 style="color:white">Company: {{m.company_name}}</h6>
+    <h6 style="color:white">Date Added: {{m.date_added}}</h6>
+    <h6 style="color:white">Date Leaving: {{m.date_leaving}}</h6>
+    <h6 style="color:white">Age Rating: {{m.age_rating}}</h6>
+    <h6 style="color:white">Language: {{m.language}}</h6>
+    <h6 style="color:white">Genre: {{m.genre}}</h6>
+    <h6 style="color:white">Duration: {{m.length_in_minutes}} minutes</h6>
     {% endfor %}
 
-    <h5>Directed By:</h5>
+    <h5 style="color:white">Directed By:</h5>
     {% for d in directorList %}
-    <h6>{{d.name}}</h6>
+    <h6 style="color:white">{{d.name}}</h6>
     {% endfor %}
 
-    <h5>Cast:</h5>
+    <h5 style="color:white">Cast:</h5>
     {% for a in actorList %}
-    <h6>{{a.name}}</h6>
+    <h6 style="color:white">{{a.name}}</h6>
     {% endfor %}
 
 </body>
-
 </html>

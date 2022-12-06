@@ -39,9 +39,9 @@
     <h6>Results:</h6>
     {% for m in medias %}
     <p class="media-item">{{m.name}} ({{m.year_of_release}})
-    <a href="{% url 'details' m.id %}"><button type="button" 
+    <a href="{% url 'details' m.id %}"><button style="color:gray" type="button" 
         class="btn btn-default">View</button></a>
-    <td><a href="{% url 'edit' m.id %}"><button type="button" 
+    <td><a href="{% url 'edit' m.id %}"><button style="color:gray" type="button" 
         class="btn btn-default"> Edit</button></a></td></p>
     {% endfor %}
 
