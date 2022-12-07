@@ -25,7 +25,6 @@
         Search
       </button>
 
-        <button class="welcome-button">Edit</button>
 
         <button class="welcome-button" onclick="window.location.href='http://127.0.0.1:8000/analyse';">
         Analyse
@@ -63,10 +62,10 @@
                 <td>{{m.genre}}</td>
                 <td>{{m.length_in_minutes}}</td>
                 <td>{{m.company_id}}</td>
-                <td><a href="{% url 'edit' m.id %}"><button type="button" 
+                <td><a href="{% url 'edit' m.id %}"><button style="color:gray" type="button" 
                   class="btn btn-default"> Edit</button></a></td>
                 <td><form onsubmit="return confirm('Are you sure?');" action="{% url 'delete' m.id %}" method="post"><button name="delete" 
-                  class="btn btn-default"> Delete</button> {% csrf_token %} </form></td>
+                  style="color:gray" class="btn btn-default"> Delete</button> {% csrf_token %} </form></td>
         </tr>
         {% endfor %}
       </table>

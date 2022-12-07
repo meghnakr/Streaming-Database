@@ -2,9 +2,9 @@
 <html lang="en-US">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search page</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'welcome/style.css' %}" />
@@ -13,33 +13,48 @@
 </head>
 
 <body>
-
     <div class="header">
-        <h1>Search</h1>
-    </div>  
+        <h1>
+            Search <span></span>
+            <button onclick="history.back()" class="btn btn-primary" style="background-color: black; color: white">
+          Go Back
+        </button>
+        </h1>
+    </div>
 
     <form action="/search" method="post" class="inputs">
         {% csrf_token %}
-        <input type="text" class="submit-input" placeholder="Media Name" name="media_name">
-        <input type="text" class="submit-input" placeholder="Media Type" name="media_type">
-        <input type="text" class="submit-input" placeholder="Release Year"  name="release_year">
-        <input type="text" class="submit-input" placeholder="Language" name="language">
-        <input type="date" class="submit-input" placeholder="Date Added" name="date_added">
-        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving">
-        <input type="text" class="submit-input" placeholder="Genre" name="genre">
-        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating">
-        <input type="text" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes">
-        <input type="text" class="submit-input" placeholder="Company Name" name="company_name">
-        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors">
-        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors">
-        <input type="submit" value="Search!">
+        <input type="text" class="submit-input" placeholder="Media Name" name="media_name" />
+        <input type="text" class="submit-input" placeholder="Media Type" name="media_type" />
+        <input type="text" class="submit-input" placeholder="Release Year" name="release_year" />
+        <input type="text" class="submit-input" placeholder="Language" name="language" />
+        <input type="date" class="submit-input" placeholder="Date Added" name="date_added" />
+        <input type="date" class="submit-input" placeholder="Date Leaving" name="date_leaving" />
+        <input type="text" class="submit-input" placeholder="Genre" name="genre" />
+        <input type="text" class="submit-input" placeholder="Age Rating" name="age_rating" />
+        <input type="text" class="submit-input" placeholder="Length in Minutes" name="length_in_minutes" />
+        <input type="text" class="submit-input" placeholder="Company Name" name="company_name" />
+        <input type="text" class="submit-input" placeholder="Actors (Eg: John Smith,Lebron James)" name="actors" />
+        <input type="text" class="submit-input" placeholder="Directors (Eg: John Smith,Lebron James)" name="directors" />
+        <input type="submit" value="Search!" />
     </form>
 
     <h6>Results:</h6>
     {% for m in medias %}
-    <p class="media-item">{{m.name}} ({{m.year_of_release}})
-    <a href="{% url 'details' m.id %}"><button type="button" 
-        class="btn btn-default">View</button></a></p>
+    <p class="media-item">
+        {{m.name}} ({{m.year_of_release}})
+        <a href="{% url 'details' m.id %}"><button style="color: gray" type="button" class="btn btn-default">
+          View
+        </button></a
+      >
+      <td>
+        <a href="{% url 'edit' m.id %}"
+          ><button style="color: gray" type="button" class="btn btn-default">
+            Edit
+          </button></a
+        >
+      </td>
+    </p>
     {% endfor %}
-
-</body>
+  </body>
+</html>
