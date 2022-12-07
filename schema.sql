@@ -45,7 +45,7 @@ CREATE TABLE Profile (
    PRIMARY KEY (profile_id, subscriber_id)
 );
 
-CREATE INDEX profile_idx ON Profile(name ASC);
+CREATE INDEX profile_idx ON Profile(subscriber_id ASC, name ASC);
 
 CREATE TABLE Actor(
    id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
