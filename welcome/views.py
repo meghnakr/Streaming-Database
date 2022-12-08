@@ -459,7 +459,7 @@ def analyse(request):
         else:
             cnx = sqlConnector().engine
             session = Session(bind=cnx)
-            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
+            session.connection(execution_options={"isolation_level":"READ COMMITTED"})
             stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
             result = session.execute(stmt)
             session.commit()
