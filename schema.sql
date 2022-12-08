@@ -1,5 +1,5 @@
 CREATE TABLE Media(
-   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   id integer PRIMARY KEY NOT NULL,
    name varchar(255),
    date_added date, /* date is always YYYY-MM-DD */
    date_leaving date,
@@ -48,7 +48,7 @@ CREATE TABLE Profile (
 CREATE INDEX profile_idx ON Profile(name ASC);
 
 CREATE TABLE Actor(
-   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   id integer PRIMARY KEY NOT NULL,
    name varchar(50),
    country varchar(50)
 );
@@ -56,7 +56,7 @@ CREATE TABLE Actor(
 CREATE INDEX actor_name_idx ON Actor(name ASC);
 
 CREATE TABLE Director(
-   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   id integer PRIMARY KEY NOT NULL,
    name varchar(50),
    country varchar(50)
 );
@@ -64,7 +64,7 @@ CREATE TABLE Director(
 CREATE INDEX director_name_idx ON Director(name ASC);
 
 CREATE TABLE Company(
-   id integer PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   id integer PRIMARY KEY NOT NULL,
    name varchar(50),
    country varchar(50)
 );
