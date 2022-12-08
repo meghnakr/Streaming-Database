@@ -342,7 +342,7 @@ def search(request):
 
         cnx = sqlConnector().engine
         session = Session(bind=cnx)
-        session.connection(execution_options={"isolation_level" : "READ UNCOMMITTED"})
+        session.connection(execution_options={"isolation_level" : "READ COMMITTED"})
         result = session.execute(query, filters)
         # with cnx.connect() as db_conn:
         #     query = "SELECT M.id, M.name FROM Media M WHERE Media.genre = ? AND Media.language = ?;"
@@ -459,7 +459,7 @@ def analyse(request):
         else:
             cnx = sqlConnector().engine
             session = Session(bind=cnx)
-            session.connection(execution_options={"isolation_level":"READ COMMITTED"})
+            session.connection(execution_options={"isolation_level":"READ UNCOMMITTED"})
             stmt = "CALL getNum{}{}({});".format(newLostType, subsMediaType, request.POST.get("number"))
             result = session.execute(stmt)
             session.commit()
