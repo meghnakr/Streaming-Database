@@ -157,7 +157,7 @@ def edit(request, id):
             media.date_leaving = form.cleaned_data["date_leaving"]
             media.genre = form.cleaned_data["genre"]
             media.length_in_minutes = form.cleaned_data["length_in_minutes"]
-
+            media.company_id = form.cleaned_data["company_id"]
 
 
             # Commit the data
@@ -173,7 +173,7 @@ def edit(request, id):
         formFields = dict(name = media.name, media_type = media.media_type,
         age_rating = media.age_rating, year_of_release = media.year_of_release,
         language = media.language, date_added = media.date_added, date_leaving = media.date_leaving,
-        genre = media.genre, length_in_minutes = media.length_in_minutes)
+        genre = media.genre, length_in_minutes = media.length_in_minutes, company_id = media.company_id)
         form = MediaEditForm(formFields)
 
             # fill with initial values

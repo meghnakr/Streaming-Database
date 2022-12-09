@@ -11,4 +11,5 @@ class MediaEditForm(forms.Form):
     date_leaving = forms.DateField(label='Date Leaving')
     genre = forms.CharField(label='Genre', max_length=100)
     length_in_minutes = forms.IntegerField(label='Length in Minutes')
+    company_id = forms.IntegerField(label='Company ID')
     #company_id = forms.IntegerField(label='company_id')
